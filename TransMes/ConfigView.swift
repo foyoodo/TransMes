@@ -43,7 +43,7 @@ struct ConfigView: View {
                     }
                 }
             }
-            .listStyle(InsetGroupedListStyle())
+            .listStyle(GroupedListStyle())
             .navigationBarTitle("设置", displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
                 self.mode.wrappedValue.dismiss()

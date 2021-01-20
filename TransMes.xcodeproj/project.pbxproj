@@ -13,6 +13,7 @@
 		C631F5DB25B6BC690045385C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5DA25B6BC690045385C /* Preview Assets.xcassets */; };
 		C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E325B6BD9C0045385C /* ConfigView.swift */; };
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
+		C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F937DB25B7CD04005F8CBE /* MesModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		C631F5DC25B6BC690045385C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C631F5E325B6BD9C0045385C /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
+		C6F937DB25B7CD04005F8CBE /* MesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		C631F5D225B6BC680045385C /* TransMes */ = {
 			isa = PBXGroup;
 			children = (
+				C6F937DA25B7CCB9005F8CBE /* Modifiers */,
 				C631F5D325B6BC680045385C /* TransMesApp.swift */,
 				C631F5D525B6BC680045385C /* ContentView.swift */,
 				C631F5D725B6BC690045385C /* Assets.xcassets */,
@@ -73,6 +76,14 @@
 				C631F5DA25B6BC690045385C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C6F937DA25B7CCB9005F8CBE /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				C6F937DB25B7CD04005F8CBE /* MesModifier.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */,
+				C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */,
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
 				C631F5D425B6BC680045385C /* TransMesApp.swift in Sources */,
