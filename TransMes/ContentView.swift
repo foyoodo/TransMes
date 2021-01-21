@@ -7,18 +7,17 @@
 
 import SwiftUI
 
+struct Message {
+    var id: TimeInterval
+    var time: String
+    var message: String
+}
+
 struct ContentView: View {
     @State var input = ""
     @State var showConfigView = false
-    @State var messages: Array<String> = [
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view.",
-        "Within the same ZStack, you will create another VStack which belongs to the second segment control view."
+    @State var messages: Array<Message> = [
+        Message(id: Date().timeIntervalSince1970, time: "2021-09-01 20:22:03", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.")
     ]
     var body: some View {
         TabView {
@@ -26,14 +25,16 @@ struct ContentView: View {
                 ScrollView {
                     ScrollViewReader { value in
                         LazyVStack {
-                            ForEach(0..<messages.count) { index in
-                                Text(messages[index])
-                                    .mesStyle()
-                                    .id(index)
-                                    .contextMenu(menuItems: {
-                                        Text("Menu Item 1")
-                                        Text("Menu Item 2")
-                                    })
+                            ForEach(messages, id: \.id) { result in
+                                VStack {
+                                    Text(result.message)
+                                        .font(Font.system(size: 16, weight: .regular, design: .default))
+                                    Text("timeInterval: \(result.id)\n\(result.time)")
+                                        .font(Font.system(size: 12, weight: .regular, design: .default))
+                                        .foregroundColor(Color.blue)
+                                        .shadow(radius: 3)
+                                }
+                                .mesStyle()
                             }
                             .onAppear {
                                 value.scrollTo(messages.count - 1, anchor: .bottom)
@@ -42,9 +43,9 @@ struct ContentView: View {
                                 value.scrollTo(messages.count - 1, anchor: .bottom)
                             }
                         }
-                        .frame(maxWidth: .infinity)
                     }
                 }
+                .padding(.horizontal, 10)
                 
                 ZStack(alignment: .bottom) {
                     Capsule().fill(Color("BlankDetailColor"))
@@ -57,7 +58,7 @@ struct ContentView: View {
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(.blue)
                             Button(action: {
-                                self.messages.append(input)
+                                self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input))
                             }, label: {
                                 Image(systemName: "arrow.up")
                             })
@@ -67,7 +68,6 @@ struct ContentView: View {
                     .padding(.bottom, 5)
                     .padding(.trailing, 5)
                     .padding(.leading, 20)
-                    
                 }
                 .padding(10)
                 .frame(height: 60)
@@ -81,15 +81,23 @@ struct ContentView: View {
                 VStack {
                     Text("收藏")
                 }
-                .navigationBarTitle("收藏", displayMode: .inline)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        HStack {
+                            Image(systemName: "sun.min.fill")
+                            Text("收藏").font(.headline)
+                        }
+                    }
+                }
                 .navigationBarItems(trailing: Button(action: {
                     self.showConfigView.toggle()
                 }) {
                     Image(systemName: "gear")
                 })
-            }
-            .sheet(isPresented: $showConfigView) {
-                ConfigView()
+                .sheet(isPresented: $showConfigView) {
+                    ConfigView()
+                }
             }
             .tabItem {
                 Image(systemName: "star.fill")

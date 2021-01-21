@@ -13,6 +13,7 @@
 		C631F5DB25B6BC690045385C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5DA25B6BC690045385C /* Preview Assets.xcassets */; };
 		C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E325B6BD9C0045385C /* ConfigView.swift */; };
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
+		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
 		C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F937DB25B7CD04005F8CBE /* MesModifier.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		C631F5DC25B6BC690045385C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C631F5E325B6BD9C0045385C /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
+		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
 		C6F937DB25B7CD04005F8CBE /* MesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +68,7 @@
 				C631F5D925B6BC690045385C /* Preview Content */,
 				C631F5E325B6BD9C0045385C /* ConfigView.swift */,
 				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
+				C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */,
 			);
 			path = TransMes;
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */,
 				C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */,
 				C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */,
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
