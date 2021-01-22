@@ -39,7 +39,7 @@ struct MesModifier_Previews: PreviewProvider {
 struct MesModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .padding()
+            .padding(10)
             .frame(maxWidth: .infinity)
             .background(Color("BlankDetailColor"))
             .cornerRadius(12)

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C612C94125BA854700784FBF /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C612C94025BA854700784FBF /* CollectionView.swift */; };
+		C612C94425BA862500784FBF /* TransView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C612C94325BA862500784FBF /* TransView.swift */; };
 		C631F5D425B6BC680045385C /* TransMesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5D325B6BC680045385C /* TransMesApp.swift */; };
 		C631F5D625B6BC680045385C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5D525B6BC680045385C /* ContentView.swift */; };
 		C631F5D825B6BC690045385C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5D725B6BC690045385C /* Assets.xcassets */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C612C94025BA854700784FBF /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		C612C94325BA862500784FBF /* TransView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransView.swift; sourceTree = "<group>"; };
 		C631F5D025B6BC680045385C /* TransMes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransMes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C631F5D325B6BC680045385C /* TransMesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransMesApp.swift; sourceTree = "<group>"; };
 		C631F5D525B6BC680045385C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -69,6 +73,8 @@
 				C631F5E325B6BD9C0045385C /* ConfigView.swift */,
 				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
 				C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */,
+				C612C94025BA854700784FBF /* CollectionView.swift */,
+				C612C94325BA862500784FBF /* TransView.swift */,
 			);
 			path = TransMes;
 			sourceTree = "<group>";
@@ -160,8 +166,10 @@
 			files = (
 				C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */,
 				C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */,
+				C612C94125BA854700784FBF /* CollectionView.swift in Sources */,
 				C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */,
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
+				C612C94425BA862500784FBF /* TransView.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
 				C631F5D425B6BC680045385C /* TransMesApp.swift in Sources */,
 			);
