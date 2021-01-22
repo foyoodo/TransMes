@@ -16,7 +16,6 @@ struct Message {
 
 struct TransView: View {
     @State var input = ""
-    @State var showConfigView = false
     @State var messages: Array<Message> = [
         Message(id: Date().timeIntervalSince1970, time: "2021-01-19 21:01:19", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.", result: "NavigationLink 应该位于 NavigationView 层次结构中。菜单是外部导航视图，所以将按钮放在菜单内，激活导航链接放在导航视图内，比如隐藏在背景中。")
     ]
@@ -43,16 +42,21 @@ struct TransView: View {
                                 }
                             }
                             .mesStyle()
+                            .onTapGesture {
+                                
+                            }
                             .contextMenu(ContextMenu(menuItems: {
                                 Button(action: {
-                                    
+                                    var message = messages[0]
+                                    message.id = Date().timeIntervalSince1970
+                                    messages.append(message)
                                 }) {
-                                    Label("复制翻译结果", systemImage: "doc.on.doc")
+                                    Label("收藏", systemImage: "star")
                                 }
                                 Button(action: {
                                     
                                 }) {
-                                    Label("删除记录", systemImage: "trash")
+                                    Label("删除", systemImage: "trash")
                                 }
                             }))
                         }
