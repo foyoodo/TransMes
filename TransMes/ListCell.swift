@@ -8,28 +8,36 @@
 import SwiftUI
 
 struct ListCell<Content : View> : View {
-    let image: Image
+    let hasImage: Bool
+    var image: Image?
     let title: String
     let accessory: Content
     
     init(image: Image, title: String, @ViewBuilder accessory: () -> Content) {
+        self.hasImage = true
         self.image = image
+        self.title = title
+        self.accessory = accessory()
+    }
+    
+    init(title: String, @ViewBuilder accessory: () -> Content) {
+        self.hasImage = false
         self.title = title
         self.accessory = accessory()
     }
     
     var body: some View {
         HStack {
-            image.frame(width: 28, height: 32)
+            image?.frame(width: 28)
             Text(title)
                 .foregroundColor(.primary)
                 .font(.body)
-            Spacer()
+            Spacer().frame(height: 32)
             accessory
                 .font(.callout)
                 .foregroundColor(Color(.placeholderText))
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
         .padding(.vertical, 6)
         .frame(maxWidth: .infinity)
     }
