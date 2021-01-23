@@ -12,45 +12,90 @@ struct ConfigView: View {
     @Environment(\.presentationMode) var mode
     var body: some View {
         NavigationView {
-            List {
-                Section(header: Text("常规设置")) {
-                    NavigationLink(destination: APIConfigView()) {
-                        Label("API Key", systemImage: "mappin.circle.fill")
+            ScrollView {
+                VStack(spacing: 4) {
+                    Text("常规设置")
+                        .font(.footnote)
+                        .offset(x: 12)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: 0) {
+                        NavigationLink(destination: APIConfigView()) {
+                            ListCell(image: Image("api"), title: "API Key") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                        Divider().padding(.leading, 16)
+                        NavigationLink(destination: EmptyView()) {
+                            ListCell(image: Image("platte"), title: "外观设置") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
                     }
-                    Picker(selection: $appearanceValue, label: Label("外观设置", systemImage: "paintpalette.fill"), content: {
-                        Text("跟随系统").tag(0)
-                        Text("浅色模式").tag(1)
-                        Text("深色模式").tag(2)
-                    })
+                    .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
+                    
+                    Spacer().frame(height: 16)
+                    
+                    Text("帮助与反馈")
+                        .font(.footnote)
+                        .offset(x: 12)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: 0) {
+                        NavigationLink(destination: EmptyView()) {
+                            ListCell(image: Image("help"), title: "如何使用") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                        Divider().padding(.leading, 16)
+                        Button {
+                            
+                        } label: {
+                            ListCell(image: Image("bug"), title: "反馈问题") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                    }
+                    .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
+                    
+                    Spacer().frame(height: 16)
+                    
+                    Text("其他")
+                        .font(.footnote)
+                        .offset(x: 12)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: 0) {
+                        Button {
+                            
+                        } label: {
+                            ListCell(image: Image("star"), title: "评价应用") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                        Divider().padding(.leading, 16)
+                        Button {
+                            
+                        } label: {
+                            ListCell(image: Image("share-one"), title: "分享给朋友") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                        Divider().padding(.leading, 16)
+                        NavigationLink(destination: EmptyView()) {
+                            ListCell(image: Image("info"), title: "关于小译") {
+                                Image(systemName: "chevron.forward")
+                            }
+                        }
+                    }
+                    .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                 }
-                Section(header: Text("帮助与反馈")) {
-                    NavigationLink(destination: EmptyView()) {
-                        Label("如何使用", systemImage: "questionmark.circle.fill")
-                    }
-                    NavigationLink(destination: EmptyView()) {
-                        Label("反馈问题", systemImage: "arrow.up.circle.fill")
-                    }
-                }
-                Section(header: Text("其他")) {
-                    NavigationLink(destination: EmptyView()) {
-                        Label("评价应用", systemImage: "face.dashed.fill")
-                    }
-                    NavigationLink(destination: EmptyView()) {
-                        Label("分享给朋友", systemImage: "square.and.arrow.up.fill")
-                    }
-                    NavigationLink(destination: EmptyView()) {
-                        Label("关于小译", systemImage: "exclamationmark.circle.fill")
-                    }
-                }
+                .padding()
             }
-            .listStyle(GroupedListStyle())
+            .background(Color(.systemGroupedBackground))
             .navigationBarTitle("设置", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
-                self.mode.wrappedValue.dismiss()
-            }, label: {
-                Text("完成")
-            }))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

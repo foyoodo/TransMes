@@ -19,6 +19,7 @@ struct TransView: View {
     @State var messages: Array<Message> = [
         Message(id: Date().timeIntervalSince1970, time: "2021-01-19 21:01:19", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.", result: "NavigationLink 应该位于 NavigationView 层次结构中。菜单是外部导航视图，所以将按钮放在菜单内，激活导航链接放在导航视图内，比如隐藏在背景中。")
     ]
+    let generator = UINotificationFeedbackGenerator()
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -54,14 +55,16 @@ struct TransView: View {
                                     Label("收藏", systemImage: "star")
                                 }
                                 Button(action: {
-                                    
+                                    messages.removeLast()
                                 }) {
                                     Label("删除", systemImage: "trash")
                                 }
                             }))
                         }
                         .onChange(of: messages.count) { _ in
-                            value.scrollTo(messages[messages.count - 1].id, anchor: .bottom)
+                            if (messages.count > 0) {
+                                value.scrollTo(messages[messages.count - 1].id, anchor: .bottom)
+                            }
                         }
                     }
                 }
@@ -83,6 +86,9 @@ struct TransView: View {
                             if (input != "") {
                                 self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input, result: "这是一条测试使用的翻译结果，会在按下按钮的时候添加进来"))
                                 input = ""
+                                generator.notificationOccurred(.success)
+                            } else {
+                                generator.notificationOccurred(.error)
                             }
                         }, label: {
                             Image(systemName: "arrow.up")
