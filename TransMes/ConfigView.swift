@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ConfigView: View {
-    @State var systemAppearance = true
-    @State var appearanceValue = 1
+    @AppStorage("systemAppearance") private var systemAppearance = false
+    @AppStorage("isDarkMode") private var isDarkMode = true
     var body: some View {
         NavigationView {
             ScrollView {
@@ -45,13 +45,13 @@ struct ConfigView: View {
                                 .padding(.vertical, 6)
                             Divider().padding(.leading, 12)
                             Button {
-                                appearanceValue = 1
                                 systemAppearance = false
+                                isDarkMode = false
                                 let generator = UIImpactFeedbackGenerator(style: .soft)
                                 generator.impactOccurred()
                             } label: {
                                 ListCell(title: "浅色模式") {
-                                    if (appearanceValue == 1) {
+                                    if !isDarkMode {
                                         Image(systemName: "checkmark")
                                     } else {
                                         Image(systemName: "xmark")
@@ -60,13 +60,13 @@ struct ConfigView: View {
                             }
                             Divider().padding(.leading, 12)
                             Button {
-                                appearanceValue = 2
                                 systemAppearance = false
+                                isDarkMode = true
                                 let generator = UIImpactFeedbackGenerator(style: .soft)
                                 generator.impactOccurred()
                             } label: {
                                 ListCell(title: "深色模式") {
-                                    if (appearanceValue == 2) {
+                                    if isDarkMode {
                                         Image(systemName: "checkmark")
                                     } else {
                                         Image(systemName: "xmark")
@@ -195,7 +195,6 @@ struct CheckmarkToggleStyle: ToggleStyle {
                 .overlay(
                     Circle()
                         .foregroundColor(.white)
-                        .padding(.all, 2)
                         .overlay(
                             Image(systemName: configuration.isOn ? "checkmark" : "xmark")
                                 .resizable()
@@ -204,17 +203,19 @@ struct CheckmarkToggleStyle: ToggleStyle {
                                 .frame(width: 8, height: 8, alignment: .center)
                                 .foregroundColor(configuration.isOn ? .blue : .gray)
                         )
+                        .frame(width: 28, height: 28)
+                        .padding(.horizontal, 2)
                         .offset(x: configuration.isOn ? 10 : -10)
                         .animation(Animation.linear(duration: 0.1))
-                ).cornerRadius(20)
+                )
+                .cornerRadius(20)
                 .onTapGesture {
                     configuration.isOn.toggle()
-                    let generator = UIImpactFeedbackGenerator(style: .rigid)
+                    let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                 }
         }
     }
-    
 }
 
 struct ConfigView_Previews: PreviewProvider {
