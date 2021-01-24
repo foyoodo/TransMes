@@ -23,7 +23,7 @@ struct ContentView: View {
                     Text("收藏")
                 }.tag(1)
             
-            ConfigView()
+            SettingsView()
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                     Text("设置")

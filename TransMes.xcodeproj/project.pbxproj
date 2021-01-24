@@ -13,11 +13,11 @@
 		C631F5D625B6BC680045385C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5D525B6BC680045385C /* ContentView.swift */; };
 		C631F5D825B6BC690045385C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5D725B6BC690045385C /* Assets.xcassets */; };
 		C631F5DB25B6BC690045385C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5DA25B6BC690045385C /* Preview Assets.xcassets */; };
-		C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E325B6BD9C0045385C /* ConfigView.swift */; };
+		C631F5E425B6BD9C0045385C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E325B6BD9C0045385C /* SettingsView.swift */; };
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
 		C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */; };
 		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
-		C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F937DB25B7CD04005F8CBE /* MesModifier.swift */; };
+		C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,11 +29,11 @@
 		C631F5D725B6BC690045385C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C631F5DA25B6BC690045385C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C631F5DC25B6BC690045385C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C631F5E325B6BD9C0045385C /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
+		C631F5E325B6BD9C0045385C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
 		C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
-		C6F937DB25B7CD04005F8CBE /* MesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesModifier.swift; sourceTree = "<group>"; };
+		C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,18 +66,13 @@
 		C631F5D225B6BC680045385C /* TransMes */ = {
 			isa = PBXGroup;
 			children = (
-				C6F937DA25B7CCB9005F8CBE /* Modifiers */,
+				C6E5891025BD463800EE1442 /* Helpers */,
+				C6E5890F25BD454100EE1442 /* Views */,
+				C6E5890E25BD452C00EE1442 /* Modules */,
 				C631F5D325B6BC680045385C /* TransMesApp.swift */,
-				C631F5D525B6BC680045385C /* ContentView.swift */,
 				C631F5D725B6BC690045385C /* Assets.xcassets */,
 				C631F5DC25B6BC690045385C /* Info.plist */,
 				C631F5D925B6BC690045385C /* Preview Content */,
-				C631F5E325B6BD9C0045385C /* ConfigView.swift */,
-				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
-				C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */,
-				C612C94025BA854700784FBF /* CollectionView.swift */,
-				C612C94325BA862500784FBF /* TransView.swift */,
-				C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */,
 			);
 			path = TransMes;
 			sourceTree = "<group>";
@@ -90,12 +85,41 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		C6F937DA25B7CCB9005F8CBE /* Modifiers */ = {
+		C6E5890E25BD452C00EE1442 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				C6F937DB25B7CD04005F8CBE /* MesModifier.swift */,
+				C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */,
+				C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */,
 			);
-			path = Modifiers;
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		C6E5890F25BD454100EE1442 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C6E5891225BD478B00EE1442 /* Settings */,
+				C612C94325BA862500784FBF /* TransView.swift */,
+				C612C94025BA854700784FBF /* CollectionView.swift */,
+				C631F5D525B6BC680045385C /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C6E5891025BD463800EE1442 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		C6E5891225BD478B00EE1442 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C631F5E325B6BD9C0045385C /* SettingsView.swift */,
+				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,9 +192,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */,
-				C631F5E425B6BD9C0045385C /* ConfigView.swift in Sources */,
+				C631F5E425B6BD9C0045385C /* SettingsView.swift in Sources */,
 				C612C94125BA854700784FBF /* CollectionView.swift in Sources */,
-				C6F937DC25B7CD04005F8CBE /* MesModifier.swift in Sources */,
+				C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */,
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
 				C612C94425BA862500784FBF /* TransView.swift in Sources */,
 				C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */,

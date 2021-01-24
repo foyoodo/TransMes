@@ -1,5 +1,5 @@
 //
-//  ConfigView.swift
+//  SettingsView.swift
 //  TransMes
 //
 //  Created by foyoodo on 2021/1/19.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ConfigView: View {
+struct SettingsView: View {
     @AppStorage("systemAppearance") private var systemAppearance = false
     @AppStorage("isDarkMode") private var isDarkMode = true
     var body: some View {
@@ -39,10 +39,11 @@ struct ConfigView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: 0) {
                             Toggle("跟随系统", isOn: $systemAppearance)
-                                .toggleStyle(CheckmarkToggleStyle())
+                                .toggleStyle(SwitchToggleStyle(tint: Color.blue))
                                 .frame(height: 32)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 6)
+                                .disabled(true)
                             Divider().padding(.leading, 12)
                             Button {
                                 systemAppearance = false
@@ -184,42 +185,8 @@ struct ConfigView: View {
     }
 }
 
-struct CheckmarkToggleStyle: ToggleStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration.label
-            Spacer()
-            Rectangle()
-                .foregroundColor(configuration.isOn ? .blue : .gray)
-                .frame(width: 52, height: 32, alignment: .center)
-                .overlay(
-                    Circle()
-                        .foregroundColor(.white)
-                        .overlay(
-                            Image(systemName: configuration.isOn ? "checkmark" : "xmark")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .font(Font.title.weight(.black))
-                                .frame(width: 8, height: 8, alignment: .center)
-                                .foregroundColor(configuration.isOn ? .blue : .gray)
-                        )
-                        .frame(width: 28, height: 28)
-                        .padding(.horizontal, 2)
-                        .offset(x: configuration.isOn ? 10 : -10)
-                        .animation(Animation.linear(duration: 0.1))
-                )
-                .cornerRadius(20)
-                .onTapGesture {
-                    configuration.isOn.toggle()
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                }
-        }
-    }
-}
-
 struct ConfigView_Previews: PreviewProvider {
     static var previews: some View {
-        ConfigView()
+        SettingsView()
     }
 }
