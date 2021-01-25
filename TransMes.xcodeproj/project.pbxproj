@@ -15,6 +15,7 @@
 		C631F5DB25B6BC690045385C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C631F5DA25B6BC690045385C /* Preview Assets.xcassets */; };
 		C631F5E425B6BD9C0045385C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E325B6BD9C0045385C /* SettingsView.swift */; };
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
+		C635FE4525BF10F5000BE200 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635FE4425BF10F5000BE200 /* Message.swift */; };
 		C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */; };
 		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
 		C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */; };
@@ -32,6 +33,7 @@
 		C631F5DC25B6BC690045385C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C631F5E325B6BD9C0045385C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
+		C635FE4425BF10F5000BE200 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
 		C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransPreferenceView.swift; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 		C631F5D225B6BC680045385C /* TransMes */ = {
 			isa = PBXGroup;
 			children = (
+				C635FE4325BF10E0000BE200 /* Models */,
 				C6E5891025BD463800EE1442 /* Helpers */,
 				C6E5890F25BD454100EE1442 /* Views */,
 				C6E5890E25BD452C00EE1442 /* Modules */,
@@ -85,6 +88,14 @@
 				C631F5DA25B6BC690045385C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C635FE4325BF10E0000BE200 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C635FE4425BF10F5000BE200 /* Message.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C6E5890E25BD452C00EE1442 /* Modules */ = {
@@ -200,6 +211,7 @@
 				C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */,
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
 				C612C94425BA862500784FBF /* TransView.swift in Sources */,
+				C635FE4525BF10F5000BE200 /* Message.swift in Sources */,
 				C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
 				C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */,

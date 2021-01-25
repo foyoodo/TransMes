@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-struct Message {
-    var id: TimeInterval
-    var time: String
-    var message: String
-    var result: String
-}
-
 struct TransView: View {
     @State var input = ""
     @State var removeAll = false
@@ -96,11 +89,20 @@ struct TransView: View {
                     }
                 ,
                 trailing:
-                    Button(action: {
-                        showSheet.toggle()
-                    }, label: {
-                        Image(systemName: "arrow.triangle.swap")
-                    })
+                    HStack {
+                        Button(action: {
+                            let generator = UINotificationFeedbackGenerator()
+                            generator.notificationOccurred(.success)
+                        }, label: {
+                            Image(systemName: "wand.and.stars")
+                        })
+                        Spacer().frame(width: 32)
+                        Button(action: {
+                            showSheet.toggle()
+                        }, label: {
+                            Image(systemName: "arrow.triangle.swap")
+                        })
+                    }
             )
         }.navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showSheet, content: {

@@ -8,20 +8,17 @@
 import SwiftUI
 
 struct ListCell<Content : View> : View {
-    let hasImage: Bool
     var image: Image?
     let title: String
     let accessory: Content
     
     init(image: Image, title: String, @ViewBuilder accessory: () -> Content) {
-        self.hasImage = true
         self.image = image
         self.title = title
         self.accessory = accessory()
     }
     
     init(title: String, @ViewBuilder accessory: () -> Content) {
-        self.hasImage = false
         self.title = title
         self.accessory = accessory()
     }
