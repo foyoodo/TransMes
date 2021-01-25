@@ -17,6 +17,7 @@
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
 		C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */; };
 		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
+		C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */; };
 		C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
 		C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
+		C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransPreferenceView.swift; sourceTree = "<group>"; };
 		C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,6 +120,7 @@
 			children = (
 				C631F5E325B6BD9C0045385C /* SettingsView.swift */,
 				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
+				C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				C612C94425BA862500784FBF /* TransView.swift in Sources */,
 				C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
+				C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */,
 				C631F5D425B6BC680045385C /* TransMesApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

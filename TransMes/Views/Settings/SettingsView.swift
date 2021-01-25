@@ -15,7 +15,6 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: 4) {
                     Group {
-                        Spacer().frame(height: 12)
                         Text("基础设置")
                             .font(.footnote)
                             .offset(x: 12)
