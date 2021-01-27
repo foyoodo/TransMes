@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Message {
+struct Message: Codable {
     var id: TimeInterval
     var time: String
     var message: String

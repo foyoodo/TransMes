@@ -15,6 +15,7 @@ struct TransView: View {
     @State var messages: Array<Message> = [
         Message(id: Date().timeIntervalSince1970, time: "2021-01-19 21:01:19", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.", result: "NavigationLink 应该位于 NavigationView 层次结构中。菜单是外部导航视图，所以将按钮放在菜单内，激活导航链接放在导航视图内，比如隐藏在背景中。")
     ]
+    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("messages.json")
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -24,13 +25,21 @@ struct TransView: View {
                             ForEach(messages, id: \.id) { result in
                                 BubbleMessage(myMessage: true, text: result.message)
                                 BubbleMessage(myMessage: false, text: result.result)
+                                    .onTapGesture {
+                                        let generator = UIImpactFeedbackGenerator(style: .light)
+                                        generator.impactOccurred()
+                                        UIPasteboard.general.string = result.result
+                                    }
                             }
                             .onChange(of: messages.count) { _ in
-                                if (messages.count > 0) {
-                                    value.scrollTo(messages[messages.count - 1].id, anchor: .bottom)
+                                if messages.count > 0 {
+                                    value.scrollTo(messages.last!.id, anchor: .bottom)
                                 }
                             }
                         }
+                        .onAppear(perform: {
+                            readMessages()
+                        })
                     }
                 }
                 .padding(.horizontal, 10)
@@ -47,9 +56,12 @@ struct TransView: View {
                                 .foregroundColor(.blue)
                                 .shadow(radius: 3)
                             Button(action: {
-                                if (input != "") {
+                                if input != "" {
                                     self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input, result: "这是一条测试使用的翻译结果，会在按下按钮的时候添加进来"))
                                     input = ""
+                                    
+                                    writeMessages()
+                                    
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                 } else {
@@ -84,6 +96,7 @@ struct TransView: View {
                             primaryButton: .cancel(),
                             secondaryButton: .destructive(Text("删除"), action: {
                                 messages.removeAll()
+                                clearMessages()
                             })
                         )
                     }
@@ -96,7 +109,9 @@ struct TransView: View {
                         }, label: {
                             Image(systemName: "wand.and.stars")
                         })
+                        
                         Spacer().frame(width: 32)
+                        
                         Button(action: {
                             showSheet.toggle()
                         }, label: {
@@ -108,6 +123,49 @@ struct TransView: View {
         .sheet(isPresented: $showSheet, content: {
             TransPreferenceView(showSheet: $showSheet)
         })
+    }
+    
+    func readMessages() {
+        var filePath = ""
+        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        
+        if dirs.count > 0 {
+            let dir = dirs[0]
+            filePath = dir.appendingFormat("/" + "messages.json")
+        } else {
+            return
+        }
+        
+        if FileManager.default.fileExists(atPath: filePath) {
+            do {
+                if try String(contentsOf: fileURL) != "" {
+                    let decoder = JSONDecoder()
+                    let content = try Data(contentsOf: fileURL)
+                    messages = try decoder.decode(Array<Message>.self, from: content)
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func writeMessages() {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let data = try encoder.encode(messages)
+            try String(data: data, encoding: .utf8)!.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func clearMessages() {
+        do {
+            try "".write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print(error)
+        }
     }
 }
 

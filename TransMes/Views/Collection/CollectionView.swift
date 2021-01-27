@@ -31,8 +31,7 @@ struct CollectionView: View {
                     VStack {
                         Text(collections[index].message)
                             .font(.system(size: 16, weight: .regular, design: .default))
-                            .allowsTightening(true)
-                            .minimumScaleFactor(0.5)
+                            .lineLimit(4)
                         
                         Text("\(collections[index].time)")
                             .font(.system(size: 12, weight: .regular, design: .default))
