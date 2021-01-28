@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct APIConfigView: View {
-    @State var CaiyunToken = ""
-    @State var MrTranslatorSecretID = ""
-    @State var MrTranslatorSecretKey = ""
-    @State var SougouDeepPID = ""
-    @State var SougouDeepKey = ""
+    @AppStorage("CaiyunToken") private var CaiyunToken = ""
+    @AppStorage("MrTranslatorSecretID") private var MrTranslatorSecretID = ""
+    @AppStorage("MrTranslatorSecretKey") private var MrTranslatorSecretKey = ""
+    @AppStorage("SougouDeepPID") private var SougouDeepPID = ""
+    @AppStorage("SougouDeepKey") private var SougouDeepKey = ""
     var body: some View {
         Form {
             Section(header: Text("彩云小译")) {

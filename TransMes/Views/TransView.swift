@@ -12,6 +12,7 @@ struct TransView: View {
     @State var removeAll = false
     @State var showSheet = false
     @AppStorage("transMode") private var transMode = 0
+    @AppStorage("CaiyunToken") private var CaiyunToken = ""
     @State var messages: Array<Message> = [
         Message(id: Date().timeIntervalSince1970, time: "2021-01-19 21:01:19", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.", result: "NavigationLink 应该位于 NavigationView 层次结构中。菜单是外部导航视图，所以将按钮放在菜单内，激活导航链接放在导航视图内，比如隐藏在背景中。")
     ]
@@ -57,13 +58,9 @@ struct TransView: View {
                                 .shadow(radius: 3)
                             Button(action: {
                                 if input != "" {
-                                    self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input, result: "这是一条测试使用的翻译结果，会在按下按钮的时候添加进来"))
-                                    input = ""
-                                    
-                                    writeMessages()
-                                    
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
+                                    caiyunTrans(text: input)
                                 } else {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.warning)
@@ -166,6 +163,47 @@ struct TransView: View {
         } catch {
             print(error)
         }
+    }
+    
+    func caiyunTrans(text: String) -> Void {
+        let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")
+        let session = URLSession(configuration: .default)
+        let trans_type = "auto2zh"
+        var request = URLRequest(url: caiyunURL!)
+        
+        request.addValue("application/json", forHTTPHeaderField:"Content-Type")
+        request.addValue("token " + CaiyunToken, forHTTPHeaderField: "X-Authorization")
+        request.httpMethod = "POST"
+        let postData = ["source": text, "detect": "true", "trans_type": trans_type]
+        
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(postData)
+            request.httpBody = data
+        } catch {
+            print(error)
+        }
+        
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    print(json)
+                    self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input, result: json["target"] as! String))
+                    input = ""
+                    writeMessages()
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        })
+        task.resume()
     }
 }
 
