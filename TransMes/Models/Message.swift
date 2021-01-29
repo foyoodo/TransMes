@@ -9,7 +9,7 @@ import Foundation
 
 struct Message: Codable {
     var id: TimeInterval
+    var myMessage: Bool
     var time: String
-    var message: String
-    var result: String
+    var text: String
 }

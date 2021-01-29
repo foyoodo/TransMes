@@ -13,9 +13,7 @@ struct TransView: View {
     @State var showSheet = false
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
-    @State var messages: Array<Message> = [
-        Message(id: Date().timeIntervalSince1970, time: "2021-01-19 21:01:19", message: "NavigationLink should be inside NavigationView hierarchy. The Menu is outside navigation view, so put buttons inside menu which activate navigation link placed inside navigation view, eg. hidden in background.", result: "NavigationLink 应该位于 NavigationView 层次结构中。菜单是外部导航视图，所以将按钮放在菜单内，激活导航链接放在导航视图内，比如隐藏在背景中。")
-    ]
+    @State var messages: Array<Message> = []
     let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("messages.json")
     var body: some View {
         NavigationView {
@@ -24,12 +22,13 @@ struct TransView: View {
                     ScrollViewReader { value in
                         LazyVStack {
                             ForEach(messages, id: \.id) { result in
-                                BubbleMessage(myMessage: true, text: result.message)
-                                BubbleMessage(myMessage: false, text: result.result)
+                                BubbleMessage(myMessage: result.myMessage ? true : false, text: result.text)
                                     .onTapGesture {
-                                        let generator = UIImpactFeedbackGenerator(style: .light)
-                                        generator.impactOccurred()
-                                        UIPasteboard.general.string = result.result
+                                        if !result.myMessage {
+                                            let generator = UIImpactFeedbackGenerator(style: .light)
+                                            generator.impactOccurred()
+                                            UIPasteboard.general.string = result.text
+                                        }
                                     }
                             }
                             .onChange(of: messages.count) { _ in
@@ -40,6 +39,9 @@ struct TransView: View {
                         }
                         .onAppear(perform: {
                             readMessages()
+                            if messages.count > 0 {
+                                value.scrollTo(messages.last!.id, anchor: .bottom)
+                            }
                         })
                     }
                 }
@@ -60,7 +62,9 @@ struct TransView: View {
                                 if input != "" {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
+                                    messages.append(Message(id: Date().timeIntervalSince1970, myMessage: true, time: currentTime(), text: input))
                                     caiyunTrans(text: input)
+                                    input = ""
                                 } else {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.warning)
@@ -195,8 +199,7 @@ struct TransView: View {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print(json)
-                    self.messages.append(Message(id: Date().timeIntervalSince1970, time: currentTime(), message: input, result: json["target"] as! String))
-                    input = ""
+                    self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: json["target"] as! String))
                     writeMessages()
                 }
             } catch let error {
