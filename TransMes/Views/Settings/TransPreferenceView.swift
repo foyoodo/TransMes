@@ -7,40 +7,85 @@
 
 import SwiftUI
 
-let TransMode = [
+let Language = [
     "自动检测",
-    "中 → 英",
-    "英 → 中"
+    "英语",
+    "日语",
 ]
 
 struct TransPreferenceView: View {
     @Binding var showSheet: Bool
     @AppStorage("transMode") private var transMode = 0
+    @AppStorage("targetValue") private var targetValue = 0
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 4) {
                     Group {
-                        Text("语言")
+                        Picker(selection: $transMode, label: Text("Language Picker"), content: {
+                            Text("翻译为中文").tag(0)
+                            Text("由中文翻译").tag(1)
+                        })
+                        .pickerStyle(SegmentedPickerStyle())
+                        .onChange(of: transMode, perform: { value in
+                            if value == 1 && targetValue == 0 {
+                                targetValue = 1
+                            }
+                        })
+                    }
+                    
+                    Group {
+                        Spacer().frame(height: 12)
+                        Text((transMode == 0 ? "源语言：" : "目标语言：") + Language[targetValue])
                             .font(.footnote)
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        VStack(spacing: 0) {
-                            ForEach(0..<TransMode.count) { index in
-                                Button {
-                                    transMode = index
-                                    showSheet.toggle()
-                                    let generator = UIImpactFeedbackGenerator(style: .soft)
-                                    generator.impactOccurred()
-                                } label: {
-                                    ListCell(title: TransMode[index]) {}
+                        
+                        let rule = [
+                            GridItem(.adaptive(minimum: 120))
+                        ]
+                        LazyVGrid(columns: rule, spacing: 10) {
+                            if transMode == 1 {
+                                ForEach(1..<Language.count) { index in
+                                    Button {
+                                        targetValue = index
+                                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                                        generator.impactOccurred()
+                                    } label: {
+                                        Text(Language[index])
+                                            .foregroundColor(.primary)
+                                        Spacer()
+                                        Image(systemName: targetValue == index ? "checkmark" : "xmark")
+                                            .font(.callout)
+                                            .foregroundColor(Color(.placeholderText))
+                                    }
+                                    .frame(width: 100)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
+                                    .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                                 }
-                                if (index < TransMode.count - 1) {
-                                    Divider().padding(.leading, 12)
+                            } else {
+                                ForEach(0..<Language.count) { index in
+                                    Button {
+                                        targetValue = index
+                                        let generator = UIImpactFeedbackGenerator(style: .soft)
+                                        generator.impactOccurred()
+                                    } label: {
+                                        Text(Language[index])
+                                            .foregroundColor(.primary)
+                                        Spacer()
+                                        Image(systemName: targetValue == index ? "checkmark" : "xmark")
+                                            .font(.callout)
+                                            .foregroundColor(Color(.placeholderText))
+                                    }
+                                    .frame(width: 100)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
+                                    .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                                 }
                             }
-                        }.background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
+                        }
                     }
                 }
                 .padding()

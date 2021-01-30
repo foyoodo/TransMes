@@ -12,6 +12,7 @@ struct TransView: View {
     @State var removeAll = false
     @State var showSheet = false
     @AppStorage("transMode") private var transMode = 0
+    @AppStorage("targetValue") private var targetValue = 0
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
     @State var messages: Array<Message> = []
     let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("messages.json")
@@ -82,24 +83,38 @@ struct TransView: View {
                 .padding(10)
                 .frame(height: 60)
             }
-            .navigationBarTitle(TransMode[transMode], displayMode: .inline)
+            .navigationBarTitle((transMode == 0 ? Language[targetValue] + " → 中文" : "中文 → " + Language[targetValue]), displayMode: .inline)
             .navigationBarItems(
                 leading:
-                    Button(action: {
-                        removeAll.toggle()
-                    }, label: {
-                        Image(systemName: "trash")
-                    })
-                    .alert(isPresented: $removeAll) {
-                        Alert(
-                            title: Text("确认删除所有记录？"),
-                            message: Text("删除数据后无法恢复"),
-                            primaryButton: .cancel(),
-                            secondaryButton: .destructive(Text("删除"), action: {
-                                messages.removeAll()
-                                clearMessages()
-                            })
-                        )
+                    HStack {
+                        Button(action: {
+                            removeAll.toggle()
+                        }, label: {
+                            Image(systemName: "trash")
+                        })
+                        .alert(isPresented: $removeAll) {
+                            Alert(
+                                title: Text("确认删除所有记录？"),
+                                message: Text("删除数据后无法恢复"),
+                                primaryButton: .cancel(),
+                                secondaryButton: .destructive(Text("删除"), action: {
+                                    messages.removeAll()
+                                    clearMessages()
+                                })
+                            )
+                        }
+                        
+                        Spacer().frame(width: 32)
+                        
+                        Button(action: {
+                            if targetValue != 0 {
+                                transMode = transMode == 0 ? 1 : 0
+                                let generator = UIImpactFeedbackGenerator(style: .soft)
+                                generator.impactOccurred()
+                            }
+                        }, label: {
+                            Image(systemName: "arrow.left.arrow.right")
+                        })
                     }
                 ,
                 trailing:
