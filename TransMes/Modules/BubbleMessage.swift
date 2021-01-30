@@ -26,7 +26,7 @@ struct BubbleMessage: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .foregroundColor(.white)
-                    .background(Color.blue)
+                    .background(Color("AccentColor"))
                     .font(.system(size: 16, weight: .regular, design: .default))
                     .allowsTightening(true)
                     .minimumScaleFactor(0.5)

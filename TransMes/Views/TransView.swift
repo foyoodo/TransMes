@@ -57,7 +57,7 @@ struct TransView: View {
                         ZStack {
                             Circle()
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(.blue)
+                                .foregroundColor(Color("AccentColor"))
                                 .shadow(radius: 3)
                             Button(action: {
                                 if input != "" {

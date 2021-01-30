@@ -99,7 +99,7 @@ struct SettingsView: View {
                             Button {
                                 
                             } label: {
-                                ListCell(image: Image("bug"), title: "反馈问题") {
+                                ListCell(image: Image("mail"), title: "反馈问题") {
                                     Image(systemName: "chevron.forward")
                                 }
                             }
