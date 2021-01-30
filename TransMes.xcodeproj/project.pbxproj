@@ -17,6 +17,9 @@
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
 		C635FE4525BF10F5000BE200 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635FE4425BF10F5000BE200 /* Message.swift */; };
 		C67860EA25C0607000E8C23E /* NewCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67860E925C0607000E8C23E /* NewCollectionView.swift */; };
+		C69B0F4325C55A5F00E467F6 /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69B0F4225C55A5F00E467F6 /* AppIconView.swift */; };
+		C69B0F4825C565D800E467F6 /* AppIcon-Light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C69B0F4625C565D800E467F6 /* AppIcon-Light@2x.png */; };
+		C69B0F4925C565D800E467F6 /* AppIcon-Light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C69B0F4725C565D800E467F6 /* AppIcon-Light@3x.png */; };
 		C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */; };
 		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
 		C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */; };
@@ -36,6 +39,9 @@
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
 		C635FE4425BF10F5000BE200 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C67860E925C0607000E8C23E /* NewCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCollectionView.swift; sourceTree = "<group>"; };
+		C69B0F4225C55A5F00E467F6 /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
+		C69B0F4625C565D800E467F6 /* AppIcon-Light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-Light@2x.png"; sourceTree = "<group>"; };
+		C69B0F4725C565D800E467F6 /* AppIcon-Light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-Light@3x.png"; sourceTree = "<group>"; };
 		C6C4DE7025BBB1A700D1E0F8 /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
 		C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransPreferenceView.swift; sourceTree = "<group>"; };
@@ -72,6 +78,7 @@
 		C631F5D225B6BC680045385C /* TransMes */ = {
 			isa = PBXGroup;
 			children = (
+				C69B0F4B25C566C000E467F6 /* AppIcons */,
 				C635FE4325BF10E0000BE200 /* Models */,
 				C6E5891025BD463800EE1442 /* Helpers */,
 				C6E5890F25BD454100EE1442 /* Views */,
@@ -109,6 +116,23 @@
 			path = Collection;
 			sourceTree = "<group>";
 		};
+		C69B0F4525C565D800E467F6 /* AppIcon-Light */ = {
+			isa = PBXGroup;
+			children = (
+				C69B0F4625C565D800E467F6 /* AppIcon-Light@2x.png */,
+				C69B0F4725C565D800E467F6 /* AppIcon-Light@3x.png */,
+			);
+			path = "AppIcon-Light";
+			sourceTree = "<group>";
+		};
+		C69B0F4B25C566C000E467F6 /* AppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				C69B0F4525C565D800E467F6 /* AppIcon-Light */,
+			);
+			path = AppIcons;
+			sourceTree = "<group>";
+		};
 		C6E5890E25BD452C00EE1442 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +167,7 @@
 				C631F5E325B6BD9C0045385C /* SettingsView.swift */,
 				C631F5E625B6BDDF0045385C /* APIConfigView.swift */,
 				C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */,
+				C69B0F4225C55A5F00E467F6 /* AppIconView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -204,6 +229,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C69B0F4825C565D800E467F6 /* AppIcon-Light@2x.png in Resources */,
+				C69B0F4925C565D800E467F6 /* AppIcon-Light@3x.png in Resources */,
 				C631F5DB25B6BC690045385C /* Preview Assets.xcassets in Resources */,
 				C631F5D825B6BC690045385C /* Assets.xcassets in Resources */,
 			);
@@ -223,6 +250,7 @@
 				C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */,
 				C612C94425BA862500784FBF /* TransView.swift in Sources */,
 				C635FE4525BF10F5000BE200 /* Message.swift in Sources */,
+				C69B0F4325C55A5F00E467F6 /* AppIconView.swift in Sources */,
 				C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
 				C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */,
