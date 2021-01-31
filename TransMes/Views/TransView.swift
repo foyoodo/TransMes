@@ -64,7 +64,11 @@ struct TransView: View {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                     messages.append(Message(id: Date().timeIntervalSince1970, myMessage: true, time: currentTime(), text: input))
-                                    caiyunTrans(text: input)
+                                    if transMode == 0 {
+                                        caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
+                                    } else {
+                                        caiyunTrans(text: input, from: "zh", to: LanguageCode[targetValue])
+                                    }
                                     input = ""
                                 } else {
                                     let generator = UINotificationFeedbackGenerator()
@@ -184,10 +188,10 @@ struct TransView: View {
         }
     }
     
-    func caiyunTrans(text: String) -> Void {
+    func caiyunTrans(text: String, from: String, to: String) -> Void {
         let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")
         let session = URLSession(configuration: .default)
-        let trans_type = "auto2zh"
+        let trans_type = from + "2" + to
         var request = URLRequest(url: caiyunURL!)
         
         request.addValue("application/json", forHTTPHeaderField:"Content-Type")

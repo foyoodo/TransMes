@@ -18,15 +18,6 @@ struct APIConfigView: View {
             Section(header: Text("彩云小译")) {
                 SecureField("Token", text: $CaiyunToken)
             }
-            Section(header: Text("腾讯翻译君")) {
-                TextField("Secret ID", text: $MrTranslatorSecretID)
-                SecureField("Secret Key", text: $MrTranslatorSecretKey)
-            }
-            Section(header: Text("搜狗翻译")) {
-                TextField("PID", text: $SougouDeepPID)
-                SecureField("Key", text: $SougouDeepKey)
-            }
-            Button("测试一下", action: {})
         }
     }
 }

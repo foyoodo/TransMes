@@ -13,6 +13,12 @@ let Language = [
     "日语",
 ]
 
+let LanguageCode = [
+    "auto",
+    "en",
+    "ja"
+]
+
 struct TransPreferenceView: View {
     @Binding var showSheet: Bool
     @AppStorage("transMode") private var transMode = 0
