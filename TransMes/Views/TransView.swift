@@ -15,7 +15,9 @@ struct TransView: View {
     @AppStorage("targetValue") private var targetValue = 0
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
     @State var messages: Array<Message> = []
+    @State var collections: Array<Collection> = []
     let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("messages.json")
+    let collectionsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("collections.json")
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -124,6 +126,7 @@ struct TransView: View {
                 trailing:
                     HStack {
                         Button(action: {
+                            addCollection()
                             let generator = UINotificationFeedbackGenerator()
                             generator.notificationOccurred(.success)
                         }, label: {
@@ -185,6 +188,44 @@ struct TransView: View {
             try "".write(to: fileURL, atomically: true, encoding: .utf8)
         } catch {
             print(error)
+        }
+    }
+    
+    func addCollection() {
+        var filePath = ""
+        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        
+        if dirs.count > 0 {
+            let dir = dirs[0]
+            filePath = dir.appendingFormat("/" + "collections.json")
+        } else {
+            return
+        }
+        
+        if FileManager.default.fileExists(atPath: filePath) {
+            do {
+                if try String(contentsOf: collectionsURL) != "" {
+                    let decoder = JSONDecoder()
+                    let content = try Data(contentsOf: collectionsURL)
+                    collections = try decoder.decode(Array<Collection>.self, from: content)
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        let count = messages.count - 2
+        if count >= 0 {
+            collections.append(Collection(id: Date().timeIntervalSince1970, time: currentTime(), text: messages[count].text, target: messages.last!.text))
+            
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            do {
+                let data = try encoder.encode(collections)
+                try String(data: data, encoding: .utf8)!.write(to: collectionsURL, atomically: true, encoding: .utf8)
+            } catch {
+                print(error)
+            }
         }
     }
     

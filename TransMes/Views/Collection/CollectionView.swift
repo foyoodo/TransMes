@@ -8,47 +8,89 @@
 import SwiftUI
 
 struct CollectionView: View {
-    @State var showSheet = false
-    @State var collections: Array<Message> = []
+    @State var collections: Array<Collection> = []
+    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("collections.json")
     var body: some View {
         NavigationView {
-            List(0..<collections.count) { index in
-                NavigationLink(
-                    destination:
-                        VStack {
-                            ScrollView {
-                                Text(collections[index].text)
+            VStack {
+                List {
+                    ForEach(collections, id: \.id) { result in
+                        NavigationLink(
+                            destination:
+                                ScrollView {
+                                    VStack {
+                                        Text(result.text)
+                                        Spacer().frame(height: 32)
+                                        Text(result.target)
+                                    }
+                                    .padding()
+                                }
+                        ) {
+                            VStack {
+                                Spacer().frame(height: 8)
+                                
+                                Text(result.text)
+                                    .lineLimit(4)
+                                
+                                Spacer().frame(height: 8)
+                                
+                                Text("\(result.time)")
+                                    .font(.system(size: 12, weight: .regular, design: .default))
+                                    .foregroundColor(Color("AccentColor"))
+                                    .shadow(radius: 3)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                         }
-                        .padding()
-                ) {
-                    VStack {
-                        Text(collections[index].text)
-                            .font(.system(size: 16, weight: .regular, design: .default))
-                            .lineLimit(4)
-                        
-                        Text("\(collections[index].time)")
-                            .font(.system(size: 12, weight: .regular, design: .default))
-                            .foregroundColor(Color.blue)
-                            .shadow(radius: 3)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
+                    .onDelete(perform: self.deleteItem)
                 }
             }
             .navigationBarTitle("收藏", displayMode: .inline)
-            .navigationBarItems(
-                trailing:
-                    Button(action: {
-                        showSheet.toggle()
-                    }, label: {
-                        Image(systemName: "plus.circle")
-                    })
-            )
+            .onAppear {
+                readCollections()
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(isPresented: $showSheet, content: {
-            NewCollectionView(showSheet: $showSheet)
-        })
+    }
+    
+    func readCollections() {
+        var filePath = ""
+        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+        
+        if dirs.count > 0 {
+            let dir = dirs[0]
+            filePath = dir.appendingFormat("/" + "collections.json")
+        } else {
+            return
+        }
+        
+        if FileManager.default.fileExists(atPath: filePath) {
+            do {
+                if try String(contentsOf: fileURL) != "" {
+                    let decoder = JSONDecoder()
+                    let content = try Data(contentsOf: fileURL)
+                    collections = try decoder.decode(Array<Collection>.self, from: content)
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func writeCollections() {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let data = try encoder.encode(collections)
+            try String(data: data, encoding: .utf8)!.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func deleteItem(at indexSet: IndexSet) {
+        self.collections.remove(atOffsets: indexSet)
+        writeCollections()
     }
 }
 
