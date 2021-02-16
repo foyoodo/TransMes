@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct CollectionView: View {
-    @State var collections: Array<Collection> = []
-    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("collections.json")
+    @State var collections = [Collection]()
     var body: some View {
         NavigationView {
             VStack {
@@ -54,43 +53,45 @@ struct CollectionView: View {
     }
     
     func readCollections() {
-        var filePath = ""
-        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
-        
-        if dirs.count > 0 {
-            let dir = dirs[0]
-            filePath = dir.appendingFormat("/" + "collections.json")
-        } else {
-            return
-        }
-        
-        if FileManager.default.fileExists(atPath: filePath) {
+        let path = collectionsFilePath()
+        if let data = try? Data(contentsOf: path) {
+            let decoder = JSONDecoder()
             do {
-                if try String(contentsOf: fileURL) != "" {
-                    let decoder = JSONDecoder()
-                    let content = try Data(contentsOf: fileURL)
-                    collections = try decoder.decode(Array<Collection>.self, from: content)
-                }
+                collections = try decoder.decode([Collection].self, from: data)
             } catch {
-                print(error)
+                print("Error decoding collections array: \(error.localizedDescription)")
             }
         }
     }
     
     func writeCollections() {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+//        encoder.outputFormatting = .prettyPrinted
         do {
             let data = try encoder.encode(collections)
-            try String(data: data, encoding: .utf8)!.write(to: fileURL, atomically: true, encoding: .utf8)
+            try String(data: data, encoding: .utf8)!.write(
+                to: collectionsFilePath(),
+                atomically: true,
+                encoding: .utf8)
         } catch {
-            print(error)
+            print("Error encoding collections array: \(error.localizedDescription)")
         }
     }
     
     private func deleteItem(at indexSet: IndexSet) {
         self.collections.remove(atOffsets: indexSet)
         writeCollections()
+    }
+    
+    func documentsDirectory() -> URL {
+        let paths = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func collectionsFilePath() -> URL {
+        return documentsDirectory().appendingPathComponent("Collections.json")
     }
 }
 

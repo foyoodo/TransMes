@@ -8,16 +8,15 @@
 import SwiftUI
 
 struct TransView: View {
-    @State var input = ""
-    @State var removeAll = false
-    @State var showSheet = false
+    @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("targetValue") private var targetValue = 0
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
-    @State var messages: Array<Message> = []
-    @State var collections: Array<Collection> = []
-    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("messages.json")
-    let collectionsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("collections.json")
+    @State var messages = [Message]()
+    @State var collections = [Collection]()
+    @State var input = ""
+    @State var removeAll = false
+    @State var showSheet = false
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -145,88 +144,91 @@ struct TransView: View {
         }.navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showSheet, content: {
             TransPreferenceView(showSheet: $showSheet)
+                .preferredColorScheme(isDarkMode ? .dark : .light)
         })
     }
     
     func readMessages() {
-        var filePath = ""
-        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
-        
-        if dirs.count > 0 {
-            let dir = dirs[0]
-            filePath = dir.appendingFormat("/" + "messages.json")
-        } else {
-            return
-        }
-        
-        if FileManager.default.fileExists(atPath: filePath) {
+        let path = messagesFilePath()
+        if let data = try? Data(contentsOf: path) {
+            let decoder = JSONDecoder()
             do {
-                if try String(contentsOf: fileURL) != "" {
-                    let decoder = JSONDecoder()
-                    let content = try Data(contentsOf: fileURL)
-                    messages = try decoder.decode(Array<Message>.self, from: content)
-                }
+                messages = try decoder.decode([Message].self, from: data)
             } catch {
-                print(error)
+                print("Error decoding messages array: \(error.localizedDescription)")
             }
         }
     }
     
     func writeMessages() {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
         do {
             let data = try encoder.encode(messages)
-            try String(data: data, encoding: .utf8)!.write(to: fileURL, atomically: true, encoding: .utf8)
+            try String(data: data, encoding: .utf8)!.write(
+                to: messagesFilePath(),
+                atomically: true,
+                encoding: .utf8)
         } catch {
-            print(error)
+            print("Error encoding messages array: \(error.localizedDescription)")
         }
     }
     
     func clearMessages() {
+        let path = messagesFilePath()
         do {
-            try "".write(to: fileURL, atomically: true, encoding: .utf8)
+            try "".write(to: path, atomically: true, encoding: .utf8)
         } catch {
-            print(error)
+            print("Error writing messages file: \(error.localizedDescription)")
+        }
+    }
+    
+    func readCollections() {
+        let path = collectionsFilePath()
+        if let data = try? Data(contentsOf: path) {
+            let decoder = JSONDecoder()
+            do {
+                collections = try decoder.decode([Collection].self, from: data)
+            } catch {
+                print("Error decoding collections array: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func writeCollections() {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(collections)
+            try String(data: data, encoding: .utf8)!.write(
+                to: collectionsFilePath(),
+                atomically: true,
+                encoding: .utf8)
+        } catch {
+            print("Error encoding collections array: \(error.localizedDescription)")
         }
     }
     
     func addCollection() {
-        var filePath = ""
-        let dirs: [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
-        
-        if dirs.count > 0 {
-            let dir = dirs[0]
-            filePath = dir.appendingFormat("/" + "collections.json")
-        } else {
-            return
-        }
-        
-        if FileManager.default.fileExists(atPath: filePath) {
-            do {
-                if try String(contentsOf: collectionsURL) != "" {
-                    let decoder = JSONDecoder()
-                    let content = try Data(contentsOf: collectionsURL)
-                    collections = try decoder.decode(Array<Collection>.self, from: content)
-                }
-            } catch {
-                print(error)
-            }
-        }
-        
+        readCollections()
         let count = messages.count - 2
         if count >= 0 {
             collections.append(Collection(id: Date().timeIntervalSince1970, time: currentTime(), text: messages[count].text, target: messages.last!.text))
-            
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            do {
-                let data = try encoder.encode(collections)
-                try String(data: data, encoding: .utf8)!.write(to: collectionsURL, atomically: true, encoding: .utf8)
-            } catch {
-                print(error)
-            }
+            writeCollections()
         }
+    }
+    
+    func documentsDirectory() -> URL {
+        let paths = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func messagesFilePath() -> URL {
+        return documentsDirectory().appendingPathComponent("Messages.json")
+    }
+    
+    func collectionsFilePath() -> URL {
+        return documentsDirectory().appendingPathComponent("Collections.json")
     }
     
     func caiyunTrans(text: String, from: String, to: String) -> Void {
@@ -242,11 +244,10 @@ struct TransView: View {
         
         do {
             let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
             let data = try encoder.encode(postData)
             request.httpBody = data
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in

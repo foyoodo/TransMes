@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("systemAppearance") private var systemAppearance = false
-    @AppStorage("isDarkMode") private var isDarkMode = true
+    @AppStorage("isDarkMode") private var isDarkMode = false
     var body: some View {
         NavigationView {
             ScrollView {
