@@ -40,7 +40,7 @@ struct TransView: View {
                             }
                         }
                         .onAppear(perform: {
-                            readMessages()
+                            loadMessages(&messages)
                             if messages.count > 0 {
                                 value.scrollTo(messages.last!.id, anchor: .bottom)
                             }
@@ -125,7 +125,7 @@ struct TransView: View {
                 trailing:
                     HStack {
                         Button(action: {
-                            addCollection()
+                            addCollection(messages: messages, collections: &collections)
                             let generator = UINotificationFeedbackGenerator()
                             generator.notificationOccurred(.success)
                         }, label: {
@@ -148,90 +148,11 @@ struct TransView: View {
         })
     }
     
-    func readMessages() {
-        let path = messagesFilePath()
-        if let data = try? Data(contentsOf: path) {
-            let decoder = JSONDecoder()
-            do {
-                messages = try decoder.decode([Message].self, from: data)
-            } catch {
-                print("Error decoding messages array: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func writeMessages() {
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(messages)
-            try String(data: data, encoding: .utf8)!.write(
-                to: messagesFilePath(),
-                atomically: true,
-                encoding: .utf8)
-        } catch {
-            print("Error encoding messages array: \(error.localizedDescription)")
-        }
-    }
-    
-    func clearMessages() {
-        let path = messagesFilePath()
-        do {
-            try "".write(to: path, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error writing messages file: \(error.localizedDescription)")
-        }
-    }
-    
-    func readCollections() {
-        let path = collectionsFilePath()
-        if let data = try? Data(contentsOf: path) {
-            let decoder = JSONDecoder()
-            do {
-                collections = try decoder.decode([Collection].self, from: data)
-            } catch {
-                print("Error decoding collections array: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func writeCollections() {
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(collections)
-            try String(data: data, encoding: .utf8)!.write(
-                to: collectionsFilePath(),
-                atomically: true,
-                encoding: .utf8)
-        } catch {
-            print("Error encoding collections array: \(error.localizedDescription)")
-        }
-    }
-    
-    func addCollection() {
-        readCollections()
-        let count = messages.count - 2
-        if count >= 0 {
-            collections.append(Collection(id: Date().timeIntervalSince1970, time: currentTime(), text: messages[count].text, target: messages.last!.text))
-            writeCollections()
-        }
-    }
-    
-    func documentsDirectory() -> URL {
-        let paths = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask)
-        return paths[0]
-    }
-    
-    func messagesFilePath() -> URL {
-        return documentsDirectory().appendingPathComponent("Messages.json")
-    }
-    
-    func collectionsFilePath() -> URL {
-        return documentsDirectory().appendingPathComponent("Collections.json")
-    }
-    
     func caiyunTrans(text: String, from: String, to: String) -> Void {
+        if CaiyunToken == "" {
+            self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "未填入 Token"))
+            return
+        }
         let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")
         let session = URLSession(configuration: .default)
         let trans_type = from + "2" + to
@@ -252,6 +173,7 @@ struct TransView: View {
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
             guard error == nil else {
+                self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "网络错误"))
                 return
             }
             guard let data = data else {
@@ -260,8 +182,12 @@ struct TransView: View {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print(json)
-                    self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: json["target"] as! String))
-                    writeMessages()
+                    if let target = json["target"] {
+                        self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: target as! String))
+                    } else {
+                        self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "Token 无效"))
+                    }
+                    saveMessages(messages)
                 }
             } catch let error {
                 print(error.localizedDescription)

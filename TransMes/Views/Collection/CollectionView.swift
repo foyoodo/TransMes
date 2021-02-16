@@ -82,17 +82,6 @@ struct CollectionView: View {
         self.collections.remove(atOffsets: indexSet)
         writeCollections()
     }
-    
-    func documentsDirectory() -> URL {
-        let paths = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask)
-        return paths[0]
-    }
-    
-    func collectionsFilePath() -> URL {
-        return documentsDirectory().appendingPathComponent("Collections.json")
-    }
 }
 
 struct CollectionView_Previews: PreviewProvider {
