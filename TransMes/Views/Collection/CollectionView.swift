@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct CollectionView: View {
-    @State var collections = [Collection]()
+    @ObservedObject var dataModel: DataModel
+    
     var body: some View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(collections, id: \.id) { result in
+                    ForEach(dataModel.collections, id: \.id) { result in
                         NavigationLink(
                             destination:
                                 ScrollView {
@@ -41,51 +42,15 @@ struct CollectionView: View {
                             }
                         }
                     }
-                    .onDelete(perform: self.deleteItem)
+                    .onDelete(perform: deleteItem)
                 }
             }
             .navigationBarTitle("收藏", displayMode: .inline)
-            .onAppear {
-                readCollections()
-            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    func readCollections() {
-        let path = collectionsFilePath()
-        if let data = try? Data(contentsOf: path) {
-            let decoder = JSONDecoder()
-            do {
-                collections = try decoder.decode([Collection].self, from: data)
-            } catch {
-                print("Error decoding collections array: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func writeCollections() {
-        let encoder = JSONEncoder()
-//        encoder.outputFormatting = .prettyPrinted
-        do {
-            let data = try encoder.encode(collections)
-            try String(data: data, encoding: .utf8)!.write(
-                to: collectionsFilePath(),
-                atomically: true,
-                encoding: .utf8)
-        } catch {
-            print("Error encoding collections array: \(error.localizedDescription)")
-        }
-    }
-    
     private func deleteItem(at indexSet: IndexSet) {
-        self.collections.remove(atOffsets: indexSet)
-        writeCollections()
-    }
-}
-
-struct CollectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        CollectionView()
+        self.dataModel.collections.remove(atOffsets: indexSet)
     }
 }

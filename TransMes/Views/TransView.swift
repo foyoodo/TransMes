@@ -8,22 +8,24 @@
 import SwiftUI
 
 struct TransView: View {
+    @ObservedObject var dataModel: DataModel
+    
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("targetValue") private var targetValue = 0
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
-    @State var messages = [Message]()
-    @State var collections = [Collection]()
+    
     @State var input = ""
     @State var removeAll = false
     @State var showSheet = false
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 ScrollView {
                     ScrollViewReader { value in
                         LazyVStack {
-                            ForEach(messages, id: \.id) { result in
+                            ForEach(dataModel.messages, id: \.id) { result in
                                 BubbleMessage(myMessage: result.myMessage ? true : false, text: result.text)
                                     .onTapGesture {
                                         if !result.myMessage {
@@ -33,16 +35,15 @@ struct TransView: View {
                                         }
                                     }
                             }
-                            .onChange(of: messages.count) { _ in
-                                if messages.count > 0 {
-                                    value.scrollTo(messages.last!.id, anchor: .bottom)
+                            .onChange(of: dataModel.messages.count) { _ in
+                                if dataModel.messages.count > 0 {
+                                    value.scrollTo(dataModel.messages.last!.id, anchor: .bottom)
                                 }
                             }
                         }
                         .onAppear(perform: {
-                            loadMessages(&messages)
-                            if messages.count > 0 {
-                                value.scrollTo(messages.last!.id, anchor: .bottom)
+                            if dataModel.messages.count > 0 {
+                                value.scrollTo(dataModel.messages.last!.id, anchor: .bottom)
                             }
                         })
                     }
@@ -51,20 +52,23 @@ struct TransView: View {
                 
                 ZStack(alignment: .bottom) {
                     Capsule().fill(Color("BlankDetailColor"))
+                    
                     HStack {
                         TextField("在这里输入文本", text: $input)
                             .autocapitalization(.sentences)
                             .background(Color("BlankDetailColor"))
+                        
                         ZStack {
                             Circle()
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(Color("AccentColor"))
                                 .shadow(radius: 3)
+                            
                             Button(action: {
                                 if input != "" {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
-                                    messages.append(Message(id: Date().timeIntervalSince1970, myMessage: true, time: currentTime(), text: input))
+                                    dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: true, time: currentTime(), text: input))
                                     if transMode == 0 {
                                         caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
                                     } else {
@@ -103,8 +107,7 @@ struct TransView: View {
                                 message: Text("删除数据后无法恢复"),
                                 primaryButton: .cancel(),
                                 secondaryButton: .destructive(Text("删除"), action: {
-                                    messages.removeAll()
-                                    clearMessages()
+                                    dataModel.clearMessages()
                                 })
                             )
                         }
@@ -125,7 +128,7 @@ struct TransView: View {
                 trailing:
                     HStack {
                         Button(action: {
-                            addCollection(messages: messages, collections: &collections)
+                            dataModel.addCollection()
                             let generator = UINotificationFeedbackGenerator()
                             generator.notificationOccurred(.success)
                         }, label: {
@@ -141,7 +144,8 @@ struct TransView: View {
                         })
                     }
             )
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showSheet, content: {
             TransPreferenceView(showSheet: $showSheet)
                 .preferredColorScheme(isDarkMode ? .dark : .light)
@@ -150,7 +154,7 @@ struct TransView: View {
     
     func caiyunTrans(text: String, from: String, to: String) -> Void {
         if CaiyunToken == "" {
-            self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "未填入 Token"))
+            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "未填入 Token"))
             return
         }
         let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")
@@ -173,7 +177,9 @@ struct TransView: View {
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
             guard error == nil else {
-                self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "网络错误"))
+                DispatchQueue.main.async {
+                    self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "网络错误"))
+                }
                 return
             }
             guard let data = data else {
@@ -181,24 +187,18 @@ struct TransView: View {
             }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
-                    if let target = json["target"] {
-                        self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: target as! String))
-                    } else {
-                        self.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "Token 无效"))
+                    DispatchQueue.main.async {
+                        if let target = json["target"] {
+                            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: target as! String))
+                        } else {
+                            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "Token 无效"))
+                        }
                     }
-                    saveMessages(messages)
                 }
             } catch let error {
                 print(error.localizedDescription)
             }
         })
         task.resume()
-    }
-}
-
-struct TransView_Previews: PreviewProvider {
-    static var previews: some View {
-        TransView()
     }
 }
