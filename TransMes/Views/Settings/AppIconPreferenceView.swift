@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AppIconView: View {
+struct AppIconPreferenceView: View {
     var body: some View {
         ScrollView {
             VStack {
@@ -82,6 +82,6 @@ struct AppIconView: View {
 
 struct AppIconView_Previews: PreviewProvider {
     static var previews: some View {
-        AppIconView()
+        AppIconPreferenceView()
     }
 }

@@ -74,7 +74,7 @@ struct SettingsView: View {
                                 }
                             }
                             Divider().padding(.leading, 12)
-                            NavigationLink(destination: AppIconView()) {
+                            NavigationLink(destination: AppIconPreferenceView()) {
                                 ListCell(title: "更换应用图标") {
                                     Image(systemName: "chevron.forward")
                                 }
