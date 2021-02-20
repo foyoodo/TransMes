@@ -11,9 +11,9 @@ struct TransView: View {
     @ObservedObject var dataModel: DataModel
     
     @AppStorage("isDarkMode") private var isDarkMode = false
-    @AppStorage("transMode") private var transMode = 0
-    @AppStorage("targetValue") private var targetValue = 0
     @AppStorage("transService") private var transService = 0
+    @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
+    @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
     
     @State var input = ""
     @State var removeAll = false
@@ -69,15 +69,13 @@ struct TransView: View {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                     dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
-                                    if transMode == 0 {
-                                        if transService == 0 {
-                                            dataModel.caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
-                                        } else if transService == 1 {
-                                            dataModel.sogouTrans(text: input, from: LanguageCode[targetValue], to: "zh-CHS")
-                                        }
-                                    } else {
-                                        dataModel.caiyunTrans(text: input, from: "zh", to: LanguageCode[targetValue])
+                                    
+                                    if transService == 0 {
+                                        dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+                                    } else if transService == 1 {
+                                        dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
                                     }
+                                    
                                     input = ""
                                 } else {
                                     let generator = UINotificationFeedbackGenerator()
@@ -96,7 +94,7 @@ struct TransView: View {
                 .padding(10)
                 .frame(height: 60)
             }
-            .navigationBarTitle((transMode == 0 ? Language[targetValue] + " → 中文" : "中文 → " + Language[targetValue]), displayMode: .inline)
+            .navigationBarTitle(Language[sourceLanguageCode]! + " → " + Language[targetLanguageCode]!, displayMode: .inline)
             .navigationBarItems(
                 leading:
                     HStack {
@@ -119,8 +117,10 @@ struct TransView: View {
                         Spacer().frame(width: 32)
                         
                         Button(action: {
-                            if targetValue != 0 {
-                                transMode = transMode == 0 ? 1 : 0
+                            if sourceLanguageCode != "auto" {
+                                let tmp = sourceLanguageCode
+                                sourceLanguageCode = targetLanguageCode
+                                targetLanguageCode = tmp
                                 let generator = UIImpactFeedbackGenerator(style: .soft)
                                 generator.impactOccurred()
                             }

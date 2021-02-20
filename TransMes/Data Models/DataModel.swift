@@ -152,6 +152,8 @@ class DataModel : ObservableObject {
         }
         
         let q = text.trimmingCharacters(in: CharacterSet.whitespaces)
+        let from = from + (from == "zh" ? "-CHS" : "")
+        let to = to + (to == "zh" ? "-CHS" : "")
         let pid = SogouPid
         let key = SogouKey
         let salt = arc4random()
@@ -184,6 +186,10 @@ class DataModel : ObservableObject {
                             if let translation = json["translation"] {
                                 self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: translation as! String))
                             }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未知错误"))
                         }
                     }
                 }
