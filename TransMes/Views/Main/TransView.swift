@@ -13,6 +13,7 @@ struct TransView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("targetValue") private var targetValue = 0
+    @AppStorage("transService") private var transService = 0
     
     @State var input = ""
     @State var removeAll = false
@@ -69,7 +70,11 @@ struct TransView: View {
                                     generator.notificationOccurred(.success)
                                     dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
                                     if transMode == 0 {
-                                        dataModel.caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
+                                        if transService == 0 {
+                                            dataModel.caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
+                                        } else if transService == 1 {
+                                            dataModel.sogouTrans(text: input, from: LanguageCode[targetValue], to: "zh-CHS")
+                                        }
                                     } else {
                                         dataModel.caiyunTrans(text: input, from: "zh", to: LanguageCode[targetValue])
                                     }

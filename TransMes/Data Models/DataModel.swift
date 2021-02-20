@@ -9,6 +9,8 @@ import SwiftUI
 
 class DataModel : ObservableObject {
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
+    @AppStorage("SogouPid") private var SogouPid = ""
+    @AppStorage("SogouKey") private var SogouKey = ""
     
     @Published var messages = [Message]()
     @Published var collections = [Collection]()
@@ -133,6 +135,55 @@ class DataModel : ObservableObject {
                             self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: target as! String))
                         } else {
                             self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "Token 无效"))
+                        }
+                    }
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
+    
+    func sogouTrans(text: String, from: String, to: String) -> Void {
+        if SogouPid == "" || SogouKey == "" {
+            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Pid 或 Key"))
+            return
+        }
+        
+        let q = text.trimmingCharacters(in: CharacterSet.whitespaces)
+        let pid = SogouPid
+        let key = SogouKey
+        let salt = arc4random()
+        let sign = "\(pid)\(q)\(salt)\(key)".MD5
+        
+        let url = URL(string: "https://fanyi.sogou.com/reventondc/api/sogouTranslate")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+        request.addValue("application/json", forHTTPHeaderField:"Accept")
+        
+        let payload = "from=\(from)&to=\(to)&q=\(q.addingPercentEncoding(withAllowedCharacters: . urlHostAllowed)!)&pid=\(pid)&sign=\(sign)&salt=\(salt)"
+        
+        request.httpBody = payload.data(using: String.Encoding.utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "网络错误"))
+                }
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    if let errorCode = json["errorCode"], errorCode as! String == "0" {
+                        DispatchQueue.main.async {
+                            if let translation = json["translation"] {
+                                self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: translation as! String))
+                            }
                         }
                     }
                 }
