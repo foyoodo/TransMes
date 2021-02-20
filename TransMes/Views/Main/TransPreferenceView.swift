@@ -20,9 +20,11 @@ let LanguageCode = [
 ]
 
 struct TransPreferenceView: View {
-    @Binding var showSheet: Bool
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("targetValue") private var targetValue = 0
+    
+    @Binding var showSheet: Bool
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -107,12 +109,5 @@ struct TransPreferenceView: View {
                     })
             )
         }.navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-struct TransPreferenceView_Previews: PreviewProvider {
-    @State var showSheet = true
-    static var previews: some View {
-        TransPreferenceView(showSheet: .constant(true))
     }
 }

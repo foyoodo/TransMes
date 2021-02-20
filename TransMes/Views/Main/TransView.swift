@@ -13,7 +13,6 @@ struct TransView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("transMode") private var transMode = 0
     @AppStorage("targetValue") private var targetValue = 0
-    @AppStorage("CaiyunToken") private var CaiyunToken = ""
     
     @State var input = ""
     @State var removeAll = false
@@ -68,11 +67,11 @@ struct TransView: View {
                                 if input != "" {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
-                                    dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: true, time: currentTime(), text: input))
+                                    dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
                                     if transMode == 0 {
-                                        caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
+                                        dataModel.caiyunTrans(text: input, from: LanguageCode[targetValue], to: "zh")
                                     } else {
-                                        caiyunTrans(text: input, from: "zh", to: LanguageCode[targetValue])
+                                        dataModel.caiyunTrans(text: input, from: "zh", to: LanguageCode[targetValue])
                                     }
                                     input = ""
                                 } else {
@@ -150,55 +149,5 @@ struct TransView: View {
             TransPreferenceView(showSheet: $showSheet)
                 .preferredColorScheme(isDarkMode ? .dark : .light)
         })
-    }
-    
-    func caiyunTrans(text: String, from: String, to: String) -> Void {
-        if CaiyunToken == "" {
-            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "未填入 Token"))
-            return
-        }
-        let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")
-        let session = URLSession(configuration: .default)
-        let trans_type = from + "2" + to
-        var request = URLRequest(url: caiyunURL!)
-        
-        request.addValue("application/json", forHTTPHeaderField:"Content-Type")
-        request.addValue("token " + CaiyunToken, forHTTPHeaderField: "X-Authorization")
-        request.httpMethod = "POST"
-        let postData = ["source": text, "detect": "true", "trans_type": trans_type]
-        
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(postData)
-            request.httpBody = data
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) in
-            guard error == nil else {
-                DispatchQueue.main.async {
-                    self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "网络错误"))
-                }
-                return
-            }
-            guard let data = data else {
-                return
-            }
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    DispatchQueue.main.async {
-                        if let target = json["target"] {
-                            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: target as! String))
-                        } else {
-                            self.dataModel.messages.append(Message(id: Date().timeIntervalSince1970, myMessage: false, time: currentTime(), text: "Token 无效"))
-                        }
-                    }
-                }
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        })
-        task.resume()
     }
 }

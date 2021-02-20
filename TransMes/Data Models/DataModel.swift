@@ -5,9 +5,10 @@
 //  Created by foyoodo on 2021/2/18.
 //
 
-import Foundation
+import SwiftUI
 
 class DataModel : ObservableObject {
+    @AppStorage("CaiyunToken") private var CaiyunToken = ""
     
     @Published var messages = [Message]()
     @Published var collections = [Collection]()
@@ -91,4 +92,54 @@ class DataModel : ObservableObject {
         }
     }
     
+    func caiyunTrans(text: String, from: String, to: String) -> Void {
+        if CaiyunToken == "" {
+            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Token"))
+            return
+        }
+        
+        let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")!
+        let trans_type = from + "2" + to
+        var request = URLRequest(url: caiyunURL)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField:"Content-Type")
+        request.addValue("token " + CaiyunToken, forHTTPHeaderField: "X-Authorization")
+        
+        let postData = ["source": text, "detect": "true", "trans_type": trans_type]
+        
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(postData)
+            request.httpBody = data
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "网络错误"))
+                }
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    DispatchQueue.main.async {
+                        if let target = json["target"] {
+                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: target as! String))
+                        } else {
+                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "Token 无效"))
+                        }
+                    }
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
 }
