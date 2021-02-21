@@ -11,28 +11,28 @@ class DataModel : ObservableObject {
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
     @AppStorage("SogouPid") private var SogouPid = ""
     @AppStorage("SogouKey") private var SogouKey = ""
-    
+
     @Published var messages = [Message]()
     @Published var collections = [Collection]()
-    
+
     init() {
         loadMessages()
         loadCollections()
     }
-    
+
     func documentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
-    
+
     func messagesFilePath() -> URL {
         return documentsDirectory().appendingPathComponent("Messages.json")
     }
-    
+
     func collectionsFilePath() -> URL {
         return documentsDirectory().appendingPathComponent("Collections.json")
     }
-    
+
     func loadMessages() {
         let path = messagesFilePath()
         if let data = try? Data(contentsOf: path) {
@@ -44,7 +44,7 @@ class DataModel : ObservableObject {
             }
         }
     }
-    
+
     func saveMessages() {
         let encoder = JSONEncoder()
         do {
@@ -54,7 +54,7 @@ class DataModel : ObservableObject {
             print("Error encoding messages array: \(error.localizedDescription)")
         }
     }
-    
+
     func clearMessages() {
         messages.removeAll()
         let path = messagesFilePath()
@@ -64,7 +64,7 @@ class DataModel : ObservableObject {
             print("Error writing messages file: \(error.localizedDescription)")
         }
     }
-    
+
     func loadCollections() {
         let path = collectionsFilePath()
         if let data = try? Data(contentsOf: path) {
@@ -76,7 +76,7 @@ class DataModel : ObservableObject {
             }
         }
     }
-    
+
     func saveCollections() {
         let encoder = JSONEncoder()
         do {
@@ -86,30 +86,30 @@ class DataModel : ObservableObject {
             print("Error encoding collections array: \(error.localizedDescription)")
         }
     }
-    
+
     func addCollection() {
         let count = messages.count - 2
         if count >= 0 {
             collections.append(Collection(id: Date().timeIntervalSince1970, time: currentTime(), text: messages[count].text, target: messages.last!.text))
         }
     }
-    
+
     func caiyunTrans(text: String, from: String, to: String) -> Void {
         if CaiyunToken == "" {
             self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Token"))
             return
         }
-        
+
         let caiyunURL = URL(string: "https://api.interpreter.caiyunai.com/v1/translator")!
         let trans_type = from + "2" + to
         var request = URLRequest(url: caiyunURL)
-        
+
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField:"Content-Type")
         request.addValue("token " + CaiyunToken, forHTTPHeaderField: "X-Authorization")
-        
+
         let postData = ["source": text, "detect": "true", "trans_type": trans_type]
-        
+
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(postData)
@@ -117,7 +117,7 @@ class DataModel : ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
-        
+
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 DispatchQueue.main.async {
@@ -144,13 +144,13 @@ class DataModel : ObservableObject {
         }
         task.resume()
     }
-    
+
     func sogouTrans(text: String, from: String, to: String) -> Void {
         if SogouPid == "" || SogouKey == "" {
             self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Pid 或 Key"))
             return
         }
-        
+
         let q = text.trimmingCharacters(in: CharacterSet.whitespaces)
         let from = from + (from == "zh" ? "-CHS" : "")
         let to = to + (to == "zh" ? "-CHS" : "")
@@ -158,17 +158,17 @@ class DataModel : ObservableObject {
         let key = SogouKey
         let salt = arc4random()
         let sign = "\(pid)\(q)\(salt)\(key)".MD5
-        
+
         let url = URL(string: "https://fanyi.sogou.com/reventondc/api/sogouTranslate")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
         request.addValue("application/json", forHTTPHeaderField:"Accept")
-        
+
         let payload = "from=\(from)&to=\(to)&q=\(q.addingPercentEncoding(withAllowedCharacters: . urlHostAllowed)!)&pid=\(pid)&sign=\(sign)&salt=\(salt)"
-        
+
         request.httpBody = payload.data(using: String.Encoding.utf8)
-        
+
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 DispatchQueue.main.async {

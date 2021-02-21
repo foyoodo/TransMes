@@ -9,16 +9,16 @@ import SwiftUI
 
 struct TransView: View {
     @ObservedObject var dataModel: DataModel
-    
+
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("transService") private var transService = 0
     @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
     @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
-    
+
     @State var input = ""
     @State var removeAll = false
     @State var showSheet = false
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -49,33 +49,33 @@ struct TransView: View {
                     }
                 }
                 .padding(.horizontal, 10)
-                
+
                 ZStack(alignment: .bottom) {
                     Capsule().fill(Color("BlankDetailColor"))
-                    
+
                     HStack {
                         TextField("在这里输入文本", text: $input)
                             .autocapitalization(.sentences)
                             .background(Color("BlankDetailColor"))
-                        
+
                         ZStack {
                             Circle()
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(Color("AccentColor"))
                                 .shadow(radius: 3)
-                            
+
                             Button(action: {
                                 if input != "" {
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                     dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
-                                    
+
                                     if transService == 0 {
                                         dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
                                     } else if transService == 1 {
                                         dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
                                     }
-                                    
+
                                     input = ""
                                 } else {
                                     let generator = UINotificationFeedbackGenerator()
@@ -113,9 +113,9 @@ struct TransView: View {
                                 })
                             )
                         }
-                        
+
                         Spacer().frame(width: 32)
-                        
+
                         Button(action: {
                             if sourceLanguageCode != "auto" {
                                 let tmp = sourceLanguageCode
@@ -138,9 +138,9 @@ struct TransView: View {
                         }, label: {
                             Image(systemName: "wand.and.stars")
                         })
-                        
+
                         Spacer().frame(width: 32)
-                        
+
                         Button(action: {
                             showSheet.toggle()
                         }, label: {

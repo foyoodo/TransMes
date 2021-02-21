@@ -10,12 +10,12 @@ import SwiftUI
 struct BubbleMessage: View {
     let myMessage: Bool
     let text: String
-    
+
     init(myMessage: Bool, text: String) {
         self.myMessage = myMessage
         self.text = text
     }
-    
+
     var body: some View {
         if myMessage {
             HStack {
@@ -57,11 +57,12 @@ struct BubbleMessage: View {
 
 struct BubbleShape: Shape {
     var myMessage : Bool
+
     func path(in rect: CGRect) -> Path {
         let width = rect.width
         let height = rect.height
-        
         let bezierPath = UIBezierPath()
+
         if !myMessage {
             bezierPath.move(to: CGPoint(x: 20, y: height))
             bezierPath.addLine(to: CGPoint(x: width - 15, y: height))

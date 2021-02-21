@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var dataModel: DataModel
-    
+
     @State var selection = 0
-    
+
     var body: some View {
         TabView(selection : $selection) {
             TransView(dataModel: dataModel)
@@ -19,13 +19,13 @@ struct ContentView: View {
                     Image(systemName: "heart.text.square.fill")
                     Text("小译")
                 }.tag(0)
-            
+
             CollectionView(dataModel: dataModel)
                 .tabItem {
                     Image(systemName: "star.leadinghalf.fill")
                     Text("收藏")
                 }.tag(1)
-            
+
             SettingsView()
                 .tabItem {
                     Image(systemName: "gearshape.fill")

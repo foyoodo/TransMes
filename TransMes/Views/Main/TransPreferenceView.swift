@@ -25,9 +25,9 @@ struct TransPreferenceView: View {
     @AppStorage("transService") private var transService = 0
     @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
     @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
-    
+
     @Binding var showSheet: Bool
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -36,20 +36,20 @@ struct TransPreferenceView: View {
                         Text("启用词典")
                     }
                     .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
-                    
+
                     Picker(selection: $transService, label: Text("翻译服务")) {
                         Text("彩云小译").tag(0)
                         Text("搜狗翻译").tag(1)
                     }
                 }
-                
+
                 Section(header: Text("翻译语言")) {
                     Picker(selection: $sourceLanguageCode, label: Text("源语言")) {
                         ForEach(0..<LanguageCode.count) { index in
                             Text(Language[LanguageCode[index]]!).tag(LanguageCode[index])
                         }
                     }
-                    
+
                     Picker(selection: $targetLanguageCode, label: Text("目标语言")) {
                         ForEach(1..<LanguageCode.count) { index in
                             Text(Language[LanguageCode[index]]!).tag(LanguageCode[index])

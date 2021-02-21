@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("systemAppearance") private var systemAppearance = false
+    @AppStorage("systemAppearance") private var systemAppearance = true
     @AppStorage("isDarkMode") private var isDarkMode = false
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -20,6 +21,7 @@ struct SettingsView: View {
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
+
                         VStack(spacing: 0) {
                             NavigationLink(destination: APIConfigView()) {
                                 ListCell(image: Image("api"), title: "API Key") {
@@ -28,22 +30,25 @@ struct SettingsView: View {
                             }
                         }.background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
-                    
+
                     Group {
                         Spacer().frame(height: 12)
+
                         Text("主题")
                             .font(.footnote)
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
+
                         VStack(spacing: 0) {
                             Toggle("跟随系统", isOn: $systemAppearance)
                                 .toggleStyle(SwitchToggleStyle(tint: Color.blue))
                                 .frame(height: 32)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 6)
-                                .disabled(true)
+
                             Divider().padding(.leading, 12)
+
                             Button {
                                 systemAppearance = false
                                 isDarkMode = false
@@ -58,7 +63,9 @@ struct SettingsView: View {
                                     }
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             Button {
                                 systemAppearance = false
                                 isDarkMode = true
@@ -73,7 +80,9 @@ struct SettingsView: View {
                                     }
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             NavigationLink(destination: AppIconPreferenceView()) {
                                 ListCell(title: "更换应用图标") {
                                     Image(systemName: "chevron.forward")
@@ -81,21 +90,25 @@ struct SettingsView: View {
                             }
                         }.background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
-                    
+
                     Group {
                         Spacer().frame(height: 12)
+
                         Text("帮助与反馈")
                             .font(.footnote)
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
+
                         VStack(spacing: 0) {
                             NavigationLink(destination: EmptyView()) {
                                 ListCell(image: Image("help"), title: "如何使用") {
                                     Image(systemName: "chevron.forward")
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             Button {
                                 
                             } label: {
@@ -106,31 +119,37 @@ struct SettingsView: View {
                         }
                         .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
-                    
+
                     Group {
                         Spacer().frame(height: 12)
+
                         Text("支持我们")
                             .font(.footnote)
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
+
                         VStack(spacing: 0) {
                             Button {
-                                
+
                             } label: {
                                 ListCell(image: Image("star"), title: "评价应用") {
                                     Image(systemName: "chevron.forward")
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             Button {
-                                
+
                             } label: {
                                 ListCell(image: Image("share-one"), title: "分享给朋友") {
                                     Image(systemName: "chevron.forward")
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             NavigationLink(destination: EmptyView()) {
                                 ListCell(image: Image("info"), title: "关于小译") {
                                     Image(systemName: "chevron.forward")
@@ -139,25 +158,29 @@ struct SettingsView: View {
                         }
                         .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
-                    
+
                     Group {
                         Spacer().frame(height: 12)
+
                         Text("其他")
                             .font(.footnote)
                             .offset(x: 12)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
+
                         VStack(spacing: 0) {
                             Button {
-                                
+
                             } label: {
                                 ListCell(title: "隐私条款") {
                                     Image(systemName: "chevron.forward")
                                 }
                             }
+
                             Divider().padding(.leading, 12)
+
                             Button {
-                                
+
                             } label: {
                                 ListCell(title: "常见问题") {
                                     Image(systemName: "chevron.forward")
@@ -166,12 +189,14 @@ struct SettingsView: View {
                         }
                         .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
-                    
+
                     Group {
                         Spacer().frame(height: 12)
+
                         Text("TransMes")
                             .font(.callout)
                             .foregroundColor(.secondary)
+
                         Spacer().frame(height: 12)
                     }
                 }

@@ -30,11 +30,15 @@ struct AppIconPreferenceView: View {
                                     RoundedRectangle(cornerRadius: 16)
                                         .stroke(Color(.placeholderText), lineWidth: 0.5)
                                 )
+
                             Spacer().frame(width: 24)
+
                             Text("浅色图标")
                                 .foregroundColor(.primary)
                                 .font(.body)
+
                             Spacer().frame(height: 48)
+
                             Image(systemName: "chevron.forward")
                                 .font(.title3)
                                 .foregroundColor(Color(.placeholderText))
@@ -43,9 +47,9 @@ struct AppIconPreferenceView: View {
                         .padding(.vertical, 16)
                         .frame(maxWidth: .infinity)
                     }
-                    
+
                     Divider().padding(.leading, 120)
-                    
+
                     Button {
                         UIApplication.shared.setAlternateIconName(nil)
                     } label: {
@@ -58,11 +62,15 @@ struct AppIconPreferenceView: View {
                                     RoundedRectangle(cornerRadius: 16)
                                         .stroke(Color(.placeholderText), lineWidth: 0.5)
                                 )
+
                             Spacer().frame(width: 24)
+
                             Text("深色图标")
                                 .foregroundColor(.primary)
                                 .font(.body)
+
                             Spacer().frame(height: 48)
+
                             Image(systemName: "chevron.forward")
                                 .font(.title3)
                                 .foregroundColor(Color(.placeholderText))

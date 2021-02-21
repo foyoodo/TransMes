@@ -11,18 +11,18 @@ struct ListCell<Content : View> : View {
     var image: Image?
     let title: String
     let accessory: Content
-    
+
     init(image: Image, title: String, @ViewBuilder accessory: () -> Content) {
         self.image = image
         self.title = title
         self.accessory = accessory()
     }
-    
+
     init(title: String, @ViewBuilder accessory: () -> Content) {
         self.title = title
         self.accessory = accessory()
     }
-    
+
     var body: some View {
         HStack {
             image?.frame(width: 28)
