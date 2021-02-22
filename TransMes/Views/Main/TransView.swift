@@ -11,7 +11,6 @@ struct TransView: View {
     @ObservedObject var dataModel: DataModel
 
     @AppStorage("isDarkMode") private var isDarkMode = false
-    @AppStorage("transService") private var transService = 0
     @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
     @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
 
@@ -21,8 +20,8 @@ struct TransView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                ScrollView {
+            ZStack {
+                ScrollView(.vertical, showsIndicators: false) {
                     ScrollViewReader { value in
                         LazyVStack {
                             ForEach(dataModel.messages, id: \.id) { result in
@@ -37,62 +36,24 @@ struct TransView: View {
                             }
                             .onChange(of: dataModel.messages.count) { _ in
                                 if dataModel.messages.count > 0 {
-                                    value.scrollTo(dataModel.messages.last!.id, anchor: .bottom)
+                                    value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
                                 }
                             }
                         }
                         .onAppear(perform: {
                             if dataModel.messages.count > 0 {
-                                value.scrollTo(dataModel.messages.last!.id, anchor: .bottom)
+                                value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
                             }
                         })
+                        Spacer().frame(height: 67).id("Scroll-Bottom-Spacer")
                     }
                 }
                 .padding(.horizontal, 10)
 
-                ZStack(alignment: .bottom) {
-                    Capsule().fill(Color("BlankDetailColor"))
-
-                    HStack {
-                        TextField("在这里输入文本", text: $input)
-                            .autocapitalization(.sentences)
-                            .background(Color("BlankDetailColor"))
-
-                        ZStack {
-                            Circle()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color("AccentColor"))
-                                .shadow(radius: 3)
-
-                            Button(action: {
-                                if input != "" {
-                                    let generator = UINotificationFeedbackGenerator()
-                                    generator.notificationOccurred(.success)
-                                    dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
-
-                                    if transService == 0 {
-                                        dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
-                                    } else if transService == 1 {
-                                        dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
-                                    }
-
-                                    input = ""
-                                } else {
-                                    let generator = UINotificationFeedbackGenerator()
-                                    generator.notificationOccurred(.warning)
-                                }
-                            }, label: {
-                                Image(systemName: "arrow.up")
-                            })
-                            .foregroundColor(Color.white)
-                        }
-                    }
-                    .padding(.bottom, 5)
-                    .padding(.trailing, 5)
-                    .padding(.leading, 20)
+                VStack {
+                    Spacer()
+                    TextInputView(dataModel: dataModel, input: $input)
                 }
-                .padding(10)
-                .frame(height: 60)
             }
             .navigationBarTitle(Language[sourceLanguageCode]! + " → " + Language[targetLanguageCode]!, displayMode: .inline)
             .navigationBarItems(
@@ -154,5 +115,75 @@ struct TransView: View {
             TransPreferenceView(showSheet: $showSheet)
                 .preferredColorScheme(isDarkMode ? .dark : .light)
         })
+    }
+}
+
+struct TransView_Preview: PreviewProvider {
+    static var previews: some View {
+        TransView(dataModel: DataModel())
+    }
+}
+
+struct TextInputView: View {
+    @AppStorage("transService") private var transService = 0
+    @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
+    @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
+
+    @ObservedObject var dataModel: DataModel
+    @Binding var input: String
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Capsule().fill(Color("BlankDetailColor"))
+                .overlay(
+                    Capsule()
+                        .stroke(lineWidth: 2)
+                        .foregroundColor(Color("AccentColor"))
+                )
+                .shadow(color: Color.gray.opacity(0.4), radius: 3, x: 1, y: 2)
+
+            HStack {
+                TextField("在这里输入文本", text: $input)
+                    .autocapitalization(.sentences)
+                    .background(Color("BlankDetailColor"))
+
+                ZStack {
+                    Circle()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color("AccentColor"))
+                        .shadow(radius: 2)
+
+                    Button(action: {
+                        transAction()
+                    }, label: {
+                        Image(systemName: "arrow.up")
+                    })
+                    .foregroundColor(Color.white)
+                }
+            }
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 5))
+        }
+        .padding(10)
+        .frame(height: 60)
+    }
+
+    func transAction() {
+        if input != "" {
+            dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
+
+            if transService == 0 {
+                dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+            } else if transService == 1 {
+                dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+            }
+
+            input = ""
+
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+        } else {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
+        }
     }
 }
