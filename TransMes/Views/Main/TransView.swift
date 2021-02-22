@@ -9,7 +9,9 @@ import SwiftUI
 
 struct TransView: View {
     @ObservedObject var dataModel: DataModel
+    @ObservedObject var keyboardHandler : KeyboardFollower
 
+    @AppStorage("systemAppearance") private var systemAppearance = true
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
     @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
@@ -35,16 +37,24 @@ struct TransView: View {
                                     }
                             }
                             .onChange(of: dataModel.messages.count) { _ in
-                                if dataModel.messages.count > 0 {
+                                value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
+                            }
+                        }
+                        .onAppear {
+                            self.keyboardHandler.subscribe()
+                            value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
+                        }
+                        .onDisappear {
+                            self.keyboardHandler.unsubscribe()
+                        }
+                        .onChange(of: keyboardHandler.isVisible) { isVisible in
+                            if isVisible {
+                                withAnimation(.easeInOut(duration: 1)) {
                                     value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
                                 }
                             }
                         }
-                        .onAppear(perform: {
-                            if dataModel.messages.count > 0 {
-                                value.scrollTo("Scroll-Bottom-Spacer", anchor: .bottom)
-                            }
-                        })
+
                         Spacer().frame(height: 67).id("Scroll-Bottom-Spacer")
                     }
                 }
@@ -113,14 +123,14 @@ struct TransView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showSheet, content: {
             TransPreferenceView(showSheet: $showSheet)
-                .preferredColorScheme(isDarkMode ? .dark : .light)
+                .preferredColorScheme(systemAppearance ? nil : (isDarkMode ? .dark : .light))
         })
     }
 }
 
 struct TransView_Preview: PreviewProvider {
     static var previews: some View {
-        TransView(dataModel: DataModel())
+        TransView(dataModel: DataModel(), keyboardHandler: KeyboardFollower())
     }
 }
 
@@ -137,7 +147,7 @@ struct TextInputView: View {
             Capsule().fill(Color("BlankDetailColor"))
                 .overlay(
                     Capsule()
-                        .stroke(lineWidth: 2)
+                        .stroke(lineWidth: 1.5)
                         .foregroundColor(Color("AccentColor"))
                 )
                 .shadow(color: Color.gray.opacity(0.4), radius: 3, x: 1, y: 2)

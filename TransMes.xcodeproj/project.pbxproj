@@ -25,6 +25,7 @@
 		C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */; };
 		C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */; };
 		C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */; };
+		C6EA268F25E3A91000B4066D /* KeyboardFollower.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6EA268E25E3A91000B4066D /* KeyboardFollower.swift */; };
 		C6F86EF025DEA4140033572B /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F86EEF25DEA4140033572B /* DataModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		C6CA0C5B25B936C10067FAA7 /* TimeRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRelated.swift; sourceTree = "<group>"; };
 		C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransPreferenceView.swift; sourceTree = "<group>"; };
 		C6E5890A25BD3DCC00EE1442 /* BubbleMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleMessage.swift; sourceTree = "<group>"; };
+		C6EA268E25E3A91000B4066D /* KeyboardFollower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardFollower.swift; sourceTree = "<group>"; };
 		C6F86EEF25DEA4140033572B /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,7 +87,7 @@
 				C631F5D325B6BC680045385C /* TransMesApp.swift */,
 				C631F5DC25B6BC690045385C /* Info.plist */,
 				C6E5890F25BD454100EE1442 /* Views */,
-				C635FE4325BF10E0000BE200 /* Data Models */,
+				C635FE4325BF10E0000BE200 /* Models */,
 				C6E5890E25BD452C00EE1442 /* Modules */,
 				C6E5891025BD463800EE1442 /* Helpers */,
 				C6BB00CC25DF78A300CF0685 /* Resources */,
@@ -102,14 +104,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		C635FE4325BF10E0000BE200 /* Data Models */ = {
+		C635FE4325BF10E0000BE200 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				C6F86EEF25DEA4140033572B /* DataModel.swift */,
 				C635FE4425BF10F5000BE200 /* Message.swift */,
 				C69B867125C7900900AD5E31 /* Collection.swift */,
+				C6EA268E25E3A91000B4066D /* KeyboardFollower.swift */,
 			);
-			path = "Data Models";
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C67860E725C05FF800E8C23E /* Collection */ = {
@@ -277,6 +280,7 @@
 				C635FE4525BF10F5000BE200 /* Message.swift in Sources */,
 				C69B0F4325C55A5F00E467F6 /* AppIconPreferenceView.swift in Sources */,
 				C6C4DE7125BBB1A700D1E0F8 /* ListCell.swift in Sources */,
+				C6EA268F25E3A91000B4066D /* KeyboardFollower.swift in Sources */,
 				C631F5D625B6BC680045385C /* ContentView.swift in Sources */,
 				C6CE4E7525BE5332003FF0D3 /* TransPreferenceView.swift in Sources */,
 				C631F5D425B6BC680045385C /* TransMesApp.swift in Sources */,
@@ -408,7 +412,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"TransMes/Preview Content\"";
 				DEVELOPMENT_TEAM = 42LU364YZR;
 				ENABLE_PREVIEWS = YES;
@@ -432,7 +436,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"TransMes/Preview Content\"";
 				DEVELOPMENT_TEAM = 42LU364YZR;
 				ENABLE_PREVIEWS = YES;

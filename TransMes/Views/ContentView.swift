@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var dataModel: DataModel
+    @ObservedObject var keyboardHandler : KeyboardFollower
 
     @State var selection = 0
 
     var body: some View {
         TabView(selection : $selection) {
-            TransView(dataModel: dataModel)
+            TransView(dataModel: dataModel, keyboardHandler: keyboardHandler)
                 .tabItem {
                     Image(systemName: "heart.text.square.fill")
                     Text("小译")

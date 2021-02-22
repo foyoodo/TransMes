@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct TransMesApp: App {
     @StateObject var dataModel = DataModel()
+    @StateObject var keyboardHandler = KeyboardFollower()
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -18,7 +19,7 @@ struct TransMesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(dataModel: dataModel)
+            ContentView(dataModel: dataModel, keyboardHandler: keyboardHandler)
                 .preferredColorScheme(systemAppearance ? nil : (isDarkMode ? .dark : .light))
         }
         .onChange(of: scenePhase) { scenePhase in
