@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CollectionView: View {
-    @ObservedObject var dataModel: DataModel
+    @EnvironmentObject var dataModel: DataModel
     
     var body: some View {
         NavigationView {

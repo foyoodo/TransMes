@@ -17,6 +17,7 @@
 		C631F5E725B6BDDF0045385C /* APIConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C631F5E625B6BDDF0045385C /* APIConfigView.swift */; };
 		C635FE4525BF10F5000BE200 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C635FE4425BF10F5000BE200 /* Message.swift */; };
 		C6392C7325E0B35F00C3C534 /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6392C7225E0B35E00C3C534 /* StringRelated.swift */; };
+		C63AF34B25E4A55800D93D40 /* TextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C63AF34A25E4A55800D93D40 /* TextInputView.swift */; };
 		C69B0F4325C55A5F00E467F6 /* AppIconPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69B0F4225C55A5F00E467F6 /* AppIconPreferenceView.swift */; };
 		C69B0F4825C565D800E467F6 /* AppIcon-Light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C69B0F4625C565D800E467F6 /* AppIcon-Light@2x.png */; };
 		C69B0F4925C565D800E467F6 /* AppIcon-Light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C69B0F4725C565D800E467F6 /* AppIcon-Light@3x.png */; };
@@ -42,6 +43,7 @@
 		C631F5E625B6BDDF0045385C /* APIConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigView.swift; sourceTree = "<group>"; };
 		C635FE4425BF10F5000BE200 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		C6392C7225E0B35E00C3C534 /* StringRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRelated.swift; sourceTree = "<group>"; };
+		C63AF34A25E4A55800D93D40 /* TextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputView.swift; sourceTree = "<group>"; };
 		C69B0F4225C55A5F00E467F6 /* AppIconPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconPreferenceView.swift; sourceTree = "<group>"; };
 		C69B0F4625C565D800E467F6 /* AppIcon-Light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-Light@2x.png"; sourceTree = "<group>"; };
 		C69B0F4725C565D800E467F6 /* AppIcon-Light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-Light@3x.png"; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			children = (
 				C612C94325BA862500784FBF /* TransView.swift */,
 				C6CE4E7425BE5332003FF0D3 /* TransPreferenceView.swift */,
+				C63AF34A25E4A55800D93D40 /* TextInputView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			files = (
 				C6392C7325E0B35F00C3C534 /* StringRelated.swift in Sources */,
 				C6CA0C5C25B936C10067FAA7 /* TimeRelated.swift in Sources */,
+				C63AF34B25E4A55800D93D40 /* TextInputView.swift in Sources */,
 				C631F5E425B6BD9C0045385C /* SettingsView.swift in Sources */,
 				C612C94125BA854700784FBF /* CollectionView.swift in Sources */,
 				C6E5890B25BD3DCC00EE1442 /* BubbleMessage.swift in Sources */,

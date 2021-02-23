@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TransView: View {
-    @ObservedObject var dataModel: DataModel
-    @ObservedObject var keyboardHandler : KeyboardFollower
+    @EnvironmentObject var dataModel: DataModel
+    @EnvironmentObject var keyboardHandler : KeyboardFollower
 
     @AppStorage("systemAppearance") private var systemAppearance = true
     @AppStorage("isDarkMode") private var isDarkMode = false
@@ -62,7 +62,7 @@ struct TransView: View {
 
                 VStack {
                     Spacer()
-                    TextInputView(dataModel: dataModel, input: $input)
+                    TextInputView(input: $input)
                 }
             }
             .navigationBarTitle(Language[sourceLanguageCode]! + " → " + Language[targetLanguageCode]!, displayMode: .inline)
@@ -130,70 +130,8 @@ struct TransView: View {
 
 struct TransView_Preview: PreviewProvider {
     static var previews: some View {
-        TransView(dataModel: DataModel(), keyboardHandler: KeyboardFollower())
-    }
-}
-
-struct TextInputView: View {
-    @AppStorage("transService") private var transService = 0
-    @AppStorage("sourceLanguageCode") private var sourceLanguageCode = "auto"
-    @AppStorage("targetLanguageCode") private var targetLanguageCode = "zh"
-
-    @ObservedObject var dataModel: DataModel
-    @Binding var input: String
-
-    var body: some View {
-        ZStack(alignment: .bottom) {
-            Capsule().fill(Color("BlankDetailColor"))
-                .overlay(
-                    Capsule()
-                        .stroke(lineWidth: 1.5)
-                        .foregroundColor(Color("AccentColor"))
-                )
-                .shadow(color: Color.gray.opacity(0.4), radius: 3, x: 1, y: 2)
-
-            HStack {
-                TextField("在这里输入文本", text: $input)
-                    .autocapitalization(.sentences)
-                    .background(Color("BlankDetailColor"))
-
-                ZStack {
-                    Circle()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(Color("AccentColor"))
-                        .shadow(radius: 2)
-
-                    Button(action: {
-                        transAction()
-                    }, label: {
-                        Image(systemName: "arrow.up")
-                    })
-                    .foregroundColor(Color.white)
-                }
-            }
-            .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 5))
-        }
-        .padding(10)
-        .frame(height: 60)
-    }
-
-    func transAction() {
-        if input != "" {
-            dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
-
-            if transService == 0 {
-                dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
-            } else if transService == 1 {
-                dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
-            }
-
-            input = ""
-
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-        } else {
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.warning)
-        }
+        TransView()
+            .environmentObject(DataModel())
+            .environmentObject(KeyboardFollower())
     }
 }

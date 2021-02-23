@@ -8,20 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var dataModel: DataModel
-    @ObservedObject var keyboardHandler : KeyboardFollower
-
     @State var selection = 0
 
     var body: some View {
         TabView(selection : $selection) {
-            TransView(dataModel: dataModel, keyboardHandler: keyboardHandler)
+            TransView()
                 .tabItem {
                     Image(systemName: "heart.text.square.fill")
                     Text("小译")
                 }.tag(0)
 
-            CollectionView(dataModel: dataModel)
+            CollectionView()
                 .tabItem {
                     Image(systemName: "star.leadinghalf.fill")
                     Text("收藏")
