@@ -30,6 +30,5 @@ struct ContentView: View {
                     Text("设置")
                 }.tag(2)
         }
-        .accentColor(Color("AccentColor"))
     }
 }
