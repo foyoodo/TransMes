@@ -6,8 +6,9 @@
 
 - 彩云小译
 - 搜狗翻译
+- 有道翻译
 
-See our [board](https://www.notion.so/foyoodo/be3fc512c4e14ed6ac4cc91fdb3cccab?v=6c2135c24d034d04a44a01bde72e6395) for more detail.
+See our [board](https://github.com/foyoodo/TransMes/projects) for more detail.
 
 **Features:**
 

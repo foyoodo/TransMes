@@ -36,10 +36,12 @@ struct TransPreferenceView: View {
                         Text("启用词典")
                     }
                     .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
+                    .disabled(true)
 
                     Picker(selection: $transService, label: Text("翻译服务")) {
                         Text("彩云小译").tag(0)
                         Text("搜狗翻译").tag(1)
+                        Text("有道翻译").tag(2)
                     }
                 }
 

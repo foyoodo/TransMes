@@ -66,10 +66,15 @@ struct TextInputView: View {
         if input != "" {
             dataModel.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: true, time: currentTime(), text: input))
 
-            if transService == 0 {
-                dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
-            } else if transService == 1 {
-                dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+            switch transService {
+                case 0:
+                    dataModel.caiyunTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+                case 1:
+                    dataModel.sogouTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+                case 2:
+                    dataModel.youdaoTrans(text: input, from: sourceLanguageCode, to: targetLanguageCode)
+                default:
+                    break
             }
 
             input = ""
@@ -84,7 +89,7 @@ struct TextInputView: View {
 
     func paste() {
         if UIPasteboard.general.hasStrings {
-            input = UIPasteboard.general.string!
+            input.append(UIPasteboard.general.string!)
         }
     }
 }

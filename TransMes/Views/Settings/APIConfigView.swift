@@ -11,6 +11,8 @@ struct APIConfigView: View {
     @AppStorage("CaiyunToken") private var CaiyunToken = ""
     @AppStorage("SogouPid") private var SogouPid = ""
     @AppStorage("SogouKey") private var SogouKey = ""
+    @AppStorage("YoudaoAppID") private var YoudaoAppID = ""
+    @AppStorage("YoudaoAppKey") private var YoudaoAppKey = ""
 
     var body: some View {
         Form {
@@ -21,6 +23,11 @@ struct APIConfigView: View {
             Section(header: Text("搜狗翻译")) {
                 SecureField("Pid", text: $SogouPid)
                 SecureField("Key", text: $SogouKey)
+            }
+
+            Section(header: Text("有道翻译")) {
+                SecureField("AppID", text: $YoudaoAppID)
+                SecureField("AppKey", text: $YoudaoAppKey)
             }
         }
     }
