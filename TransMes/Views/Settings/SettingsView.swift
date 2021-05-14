@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage("systemAppearance") private var systemAppearance = true
     @AppStorage("isDarkMode") private var isDarkMode = false
+    @AppStorage("showPasteButton") private var showPasteButton = false
 
     var body: some View {
         NavigationView {
@@ -89,6 +90,25 @@ struct SettingsView: View {
                                 }
                             }
                         }.background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
+                    }
+
+                    Group {
+                        Spacer().frame(height: 12)
+
+                        Text("辅助按钮")
+                            .font(.footnote)
+                            .offset(x: 12)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        VStack(spacing: 0) {
+                            Toggle("快速粘贴", isOn: $showPasteButton)
+                                .toggleStyle(SwitchToggleStyle(tint: Color.blue))
+                                .frame(height: 32)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 6)
+                        }
+                        .background(Color(.secondarySystemGroupedBackground).cornerRadius(12))
                     }
 
                     Group {
