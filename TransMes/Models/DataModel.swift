@@ -98,7 +98,7 @@ class DataModel: ObservableObject {
 
     func caiyunTrans(text: String, from: String, to: String) {
         if CaiyunToken == "" {
-            messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Token"))
+            showErrorMessage("未填入 Token")
             return
         }
 
@@ -122,9 +122,7 @@ class DataModel: ObservableObject {
 
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard error == nil else {
-                DispatchQueue.main.async {
-                    self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "网络错误"))
-                }
+                self.showErrorMessage("网络错误")
                 return
             }
             guard let data = data else {
@@ -132,12 +130,10 @@ class DataModel: ObservableObject {
             }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    DispatchQueue.main.async {
-                        if let target = json["target"] {
-                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: target as! String))
-                        } else {
-                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "Token 无效"))
-                        }
+                    if let target = json["target"] {
+                        self.showTransMessage(target as! String)
+                    } else {
+                        self.showErrorMessage("Token 无效")
                     }
                 }
             } catch {
@@ -149,7 +145,7 @@ class DataModel: ObservableObject {
 
     func sogouTrans(text: String, from: String, to: String) {
         if SogouPid == "" || SogouKey == "" {
-            messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 Pid 或 Key"))
+            showErrorMessage("未填入 Pid 或 Key")
             return
         }
 
@@ -173,9 +169,7 @@ class DataModel: ObservableObject {
 
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard error == nil else {
-                DispatchQueue.main.async {
-                    self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "网络错误"))
-                }
+                self.showErrorMessage("网络错误")
                 return
             }
             guard let data = data else {
@@ -184,15 +178,13 @@ class DataModel: ObservableObject {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     if let errorCode = json["errorCode"], errorCode as! String == "0" {
-                        DispatchQueue.main.async {
-                            if let translation = json["translation"] {
-                                self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: translation as! String))
-                            }
+                        if let translation = json["translation"] {
+                            self.showTransMessage(translation as! String)
+                        } else {
+                            self.showErrorMessage("Token 无效")
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未知错误"))
-                        }
+                        self.showErrorMessage("网络错误")
                     }
                 }
             } catch {
@@ -204,7 +196,7 @@ class DataModel: ObservableObject {
 
     func youdaoTrans(text: String, from: String, to: String) {
         if YoudaoAppID == "" || YoudaoAppKey == "" {
-            messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未填入 AppID 或 AppKey"))
+            showErrorMessage("未填入 AppID 或 AppKey")
             return
         }
 
@@ -214,7 +206,7 @@ class DataModel: ObservableObject {
         let appID = YoudaoAppID
         let appKey = YoudaoAppKey
         let salt = arc4random()
-        let curtime = Int(Date.timeIntervalSinceReferenceDate + Date.timeIntervalBetween1970AndReferenceDate)
+        let curtime = Int(Date().timeIntervalSince1970)
         var input: String {
             q.count <= 20 ? q : "\(q.prefix(10))\(q.count)\(q.suffix(10))"
         }
@@ -231,9 +223,7 @@ class DataModel: ObservableObject {
 
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard error == nil else {
-                DispatchQueue.main.async {
-                    self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "网络错误"))
-                }
+                self.showErrorMessage("网络错误")
                 return
             }
             guard let data = data else {
@@ -243,15 +233,10 @@ class DataModel: ObservableObject {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     if let errorCode = json["errorCode"], errorCode as! String == "0" {
                         if let translations = json["translation"] as? [String] {
-                            let translation = translations[0]
-                            DispatchQueue.main.async {
-                                self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: translation))
-                            }
+                            self.showTransMessage(translations[0])
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: "未知错误"))
-                        }
+                        self.showErrorMessage("未知错误")
                     }
                 }
             } catch {
@@ -260,5 +245,17 @@ class DataModel: ObservableObject {
         }
 
         task.resume()
+    }
+
+    func showTransMessage(_ message: String) {
+        DispatchQueue.main.async {
+            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: message))
+        }
+    }
+
+    func showErrorMessage(_ message: String) {
+        DispatchQueue.main.async {
+            self.messages.append(Message(id: Date.timeIntervalSinceReferenceDate, myMessage: false, time: currentTime(), text: message))
+        }
     }
 }
